@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "${DATABASE_URL}"
+    ports:
+      - "${API_PORT}:8080"
+    depends_on:
+      - db
+    volumes:
+      - gradle-cache:/home/gradle/.gradle
+
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:5432"
+    env_file:
+      - .env
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+  gradle-cache:

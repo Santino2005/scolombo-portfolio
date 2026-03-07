@@ -1,0 +1,61 @@
+meta {
+  name: getJWT
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://dev-6uc0kuaj7fhgsxea.us.auth0.com/oauth/token
+  body: json
+  auth: none
+}
+
+headers {
+  content-type: application/json
+}
+
+body:json {
+  {
+    "grant_type": "password",
+    "username": "juan2perez2001@hotmail.com",
+    "password": "juan2001.",
+    "audience": "{{audience}}",
+    "client_id": "{{clientId}}",
+    "client_secret": "{{clientSecret}}",
+    "scope": "openid profile email"
+  }
+  /*
+  {
+    "grant_type": "password",
+    "username": "roberto2gomez1989@gmail.com",
+    "password": "roberto1989.",
+    "audience": "{{audience}}",
+    "client_id": "{{clientId}}",
+    "client_secret": "{{clientSecret}}",
+    "scope": "openid profile email"
+  }
+  {
+    "grant_type": "password",
+    "username": "santinocolombo13@gmail.com",
+    "password": "santino2005.",
+    "audience": "{{audience}}",
+    "client_id": "{{clientId}}",
+    "client_secret": "{{clientSecret}}",
+    "scope": "openid profile email"
+  }
+  */
+}
+
+script:post-response {
+  function onResponse(res) {
+    let data = res.getBody();
+    let token = bru.setEnvVar("jwt", data.access_token, { persist: true });
+  }
+  
+  onResponse(res)
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

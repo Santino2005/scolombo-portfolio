@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: email-service
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH0_ISSUER_URI}
+          audience: ${AUTH0_AUDIENCE}
+
+sendgrid:
+  api-key: ${SENDGRID_API_KEY}
+sparkpost:
+  api-key: ${SPARKPOST_SENDER_EMAIL}

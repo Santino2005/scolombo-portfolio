@@ -1,0 +1,28 @@
+meta {
+  name: sendEmail
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/email/send
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{jwt}}
+}
+
+body:json {
+  {
+    "to": "roberto2gomez1989@gmail.com",
+    "subject": "Bienvenido al sistema",
+    "body": "Hola! Este es un correo de prueba enviado desde el backend."
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

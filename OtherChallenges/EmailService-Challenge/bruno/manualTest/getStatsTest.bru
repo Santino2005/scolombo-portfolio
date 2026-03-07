@@ -1,0 +1,20 @@
+meta {
+  name: getStatsTest
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{jwt}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
