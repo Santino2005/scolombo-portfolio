@@ -1,0 +1,20 @@
+meta {
+  name: read current
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{BookClubUrl}}/:bookClubId/books/current
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+params:path {
+  bookClubId: 40111e94-fcc9-49a7-ad50-e4fe19fc450d
+}

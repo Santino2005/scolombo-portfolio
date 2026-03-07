@@ -1,0 +1,30 @@
+meta {
+  name: search
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{booksBaseUrl}}?search=a&tags=Fantasy&page=0&size=10&direction=asc
+  body: none
+  auth: inherit
+}
+
+params:query {
+  search: a
+  tags: Fantasy
+  page: 0
+  size: 10
+  direction: asc
+}
+
+assert {
+  res.status: eq 200
+  res.body: isJson
+  res.body.content: isArray
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

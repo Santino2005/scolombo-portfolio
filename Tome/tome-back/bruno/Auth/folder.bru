@@ -1,0 +1,12 @@
+meta {
+  name: Auth
+  seq: 4
+}
+
+auth {
+  mode: none
+}
+
+vars:pre-request {
+  authBaseUrl: https://{{issuerURI}}
+}

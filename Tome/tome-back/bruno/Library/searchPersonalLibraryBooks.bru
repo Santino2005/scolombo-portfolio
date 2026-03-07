@@ -1,0 +1,21 @@
+meta {
+  name: searchPersonalLibraryBooks
+  type: http
+  seq: 4
+}
+
+get {
+  url: http:localhost:8080/libraries/personal?search=a&tags=fantasy
+  body: none
+  auth: inherit
+}
+
+params:query {
+  search: a
+  tags: fantasy
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

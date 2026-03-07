@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+echo "Running ktlint format..."
+./gradlew -q ktlintFormat || exit 1
+git add -u
+echo "Running ktlint check..."
+./gradlew -q ktlintCheck || exit 1
+echo "OK"

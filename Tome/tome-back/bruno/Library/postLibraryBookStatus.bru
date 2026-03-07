@@ -1,0 +1,27 @@
+meta {
+  name: postLibraryBookStatus
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{librariesBaseUrl}}/books/:bookId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  bookId: {{bookId}}
+}
+
+body:json {
+  {
+    "readingStatus": "READ",
+    "currentPage": 5
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

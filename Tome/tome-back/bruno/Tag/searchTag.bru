@@ -1,0 +1,26 @@
+meta {
+  name: searchTags
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/tags?search=fan
+  body: none
+  auth: inherit
+}
+
+params:query {
+  search: fan
+}
+
+assert {
+  res.status: eq 200
+  res.body: isJson
+  res.body.tags: isArray
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

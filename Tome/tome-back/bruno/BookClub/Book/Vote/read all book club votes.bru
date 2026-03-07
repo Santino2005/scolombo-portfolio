@@ -1,0 +1,21 @@
+meta {
+  name: read all book club votes
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BookClubUrl}}/:bookClubId/books/:bookId/votes
+  body: none
+  auth: inherit
+}
+
+params:path {
+  bookId: {{bookId}}
+  bookClubId: {{bookClubId}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

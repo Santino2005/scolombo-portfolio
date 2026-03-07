@@ -1,0 +1,26 @@
+meta {
+  name: read one
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{BookClubUrl}}/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 49c87829-02ec-420d-b98f-56a602c39f90
+}
+
+assert {
+  res.body.id: isDefined
+  res.body.details: isDefined
+  res.body.imageBase64: isDefined
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

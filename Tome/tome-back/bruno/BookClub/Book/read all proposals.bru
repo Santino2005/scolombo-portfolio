@@ -1,0 +1,24 @@
+meta {
+  name: read all proposals
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BookClubUrl}}/:bookClubId/books
+  body: none
+  auth: inherit
+}
+
+params:path {
+  bookClubId: {{bookClubId}}
+}
+
+vars:pre-request {
+  bookClubId: 1b5d78dc-c6a1-4993-b1a7-82cc98003dbe
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

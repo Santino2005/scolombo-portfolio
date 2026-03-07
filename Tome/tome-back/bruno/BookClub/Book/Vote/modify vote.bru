@@ -1,0 +1,27 @@
+meta {
+  name: modify vote
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BookClubUrl}}/:bookClubId/books/:bookId/votes/me
+  body: json
+  auth: inherit
+}
+
+params:path {
+  bookClubId: {{bookClubId}}
+  bookId: {{bookId}}
+}
+
+body:json {
+  {
+    "hasAccepted":"false"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,16 @@
+meta {
+  name: get bookClubMemberData
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:8080/book-clubs/70dd7645-c2cd-4853-90ee-89e9a945e46a/join/data
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

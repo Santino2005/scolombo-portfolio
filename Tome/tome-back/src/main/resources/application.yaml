@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: tome
+  profiles:
+    active: ${APPLICATION_PROFILE}
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+okta:
+  oauth2:
+    # Replace with the domain of your Auth0 tenant.
+    issuer: ${AUTH0_ISSUER_URI}
+    # Replace with the API Identifier for your Auth0 API.
+    audience: ${AUTH0_AUDIENCE}
+auth0:
+  issuer:
+    uri: ${AUTH0_ISSUER_URI}
+  management:
+    client:
+      id: ${AUTH0_MANAGEMENT_CLIENT_ID}
+      secret: ${AUTH0_MANAGEMENT_CLIENT_SECRET}
+    audience: ${AUTH0_MANAGEMENT_AUDIENCE}
+    token: ${AUTH0_MANAGEMENT_TOKEN}
+  environment:
+    file:
+      path: ${AUTH0_ENVIRONMENT_FILE_PATH:}
+seeders:
+  csv: classpath:csv/goodreads_books.csv

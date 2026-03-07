@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: tome-test
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dummy.auth0.com/
+          audience: test-audience
+
+auth0:
+  issuer:
+    uri: https://dummy.auth0.com/
+  management:
+    client:
+      id: dummy-client-id
+      secret: dummy-client-secret
+    audience: dummy-audience
+    token: dummy-token
+  environment:
+    file:
+      path: ""

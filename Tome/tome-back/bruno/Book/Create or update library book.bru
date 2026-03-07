@@ -1,0 +1,29 @@
+meta {
+  name: Create or update library book
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/libraries/books/ac2f4b75-8814-4d66-ae28-1c93b49d2320
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+    token: {{jwt}}}
+
+body:json {
+  {
+    "readingStatus": "READING",
+    "currentPage": 0
+  }
+}
+
+settings {
+  encodeUrl: false
+}

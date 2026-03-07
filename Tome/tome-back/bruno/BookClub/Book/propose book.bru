@@ -1,0 +1,67 @@
+meta {
+  name: propose book
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BookClubUrl}}/:bookClubId/books/:bookId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  bookId: {{bookId}}
+  bookClubId: {{bookClubId}}
+}
+
+body:json {
+  {}
+}
+
+assert {
+  res.body.bookClubId: isDefined
+  res.body.bookId: isDefined
+  res.body.status: isDefined
+}
+
+script:pre-request {
+  /**
+   * Decode a bru response into a simple JS object
+   * @param {Object} response - A single bru response
+   * @returns {Object} Decoded JSON object
+   */
+  function decodeBruResponse(response) {
+    const decoded = Buffer.from(response.dataBuffer, 'base64').toString('utf-8');
+    return JSON.parse(decoded);
+  }
+  
+  // Create book club for current session
+  const createBookClubResult = await bru.runRequest('BookClub/create.bru');
+  const createBookClubMap = decodeBruResponse(createBookClubResult);
+  const bookClubId = createBookClubMap.id
+  bru.setVar("bookClubId",bookClubId)
+  
+  // Add book to current session library
+  const searchBooksResult = await bru.runRequest('Book/search.bru')
+  const searchBooksMap = decodeBruResponse(searchBooksResult)
+  const bookId = searchBooksMap.content[0].id
+  bru.setVar("bookId",bookId)
+  const addBookResult = await bru.runRequest('Library/postLibraryBookStatus.bru');
+  const addBookMap = decodeBruResponse(addBookResult)
+  
+  console.log(bru.getVar("bookClubId"))
+  console.log(bru.getVar("bookId"))
+}
+
+script:post-response {
+  const body = res.body
+  bru.setVar("bookClubId",body.bookClubId)
+  bru.setVar("bookId",body.bookId)
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

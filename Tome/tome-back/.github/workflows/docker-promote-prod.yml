@@ -1,0 +1,124 @@
+name: Promote to prod (main)
+
+
+on:
+  pull_request:
+    types: [closed]
+
+
+env:
+  REGISTRY: ghcr.io
+
+
+jobs:
+  promote:
+    if: ${{ github.event.pull_request.merged == true && github.base_ref == 'main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Compute refs
+        id: meta
+        run: |
+          REPO=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')
+          SHA=${{ github.event.pull_request.head.sha }}
+          SHORT_SHA=${SHA::7}
+          echo "IMAGE=${{ env.REGISTRY }}/${REPO}" >> $GITHUB_OUTPUT
+          echo "SRC_TAG=dev-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "DST_TAG_SHA=prod-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "DST_TAG_LATEST=latest" >> $GITHUB_OUTPUT
+
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{env.REGISTRY}}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Retag and push
+        run: |
+          docker pull ${{ steps.meta.outputs.IMAGE }}:${{ steps.meta.outputs.SRC_TAG }}
+          docker tag  ${{ steps.meta.outputs.IMAGE }}:${{ steps.meta.outputs.SRC_TAG }} ${{ steps.meta.outputs.IMAGE }}:${{ steps.meta.outputs.DST_TAG_SHA }}
+          docker tag  ${{ steps.meta.outputs.IMAGE }}:${{ steps.meta.outputs.SRC_TAG }} ${{ steps.meta.outputs.IMAGE }}:${{ steps.meta.outputs.DST_TAG_LATEST }}
+          docker push ${{ steps.meta.outputs.IMAGE }}:${{ steps.meta.outputs.DST_TAG_SHA }}
+          docker push ${{ steps.meta.outputs.IMAGE }}:${{ steps.meta.outputs.DST_TAG_LATEST }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: promote
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      #       - name: Power ON Azure VM
+      #         uses: roel4ez/action-power-on-off-azure-vm@v1.0.1
+      #         with:
+      #          AZURE_VM_NAME: ${{ secrets.AZURE_PROD_VM_NAME }}
+      #          AZURE_RG_NAME: ${{ secrets.AZURE_RG_NAME }}
+      #          POWER_SWITCH: 'ON'
+      #          AZURE_SP_CLIENTID: ${{ secrets.AZURE_SP_CLIENTID }}
+      #          AZURE_SP_SECRET: ${{ secrets.AZURE_SP_SECRET }}
+      #          AZURE_TENANTID: ${{ secrets.AZURE_TENANTID }}
+
+      - name: Wait for VM to be reachable
+        run: |
+          echo "Waiting for VM to accept SSH connections..."
+          for i in {1..30}; do
+            if nc -zv ${{ secrets.PROD_IP }} 22 >/dev/null 2>&1; then
+              echo "VM is online!"
+              break
+            fi
+            echo "Attempt $i/30: VM not ready yet..."
+            sleep 10
+          done
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PROD_PRIVATE_KEY }}
+
+      - name: Add known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.PROD_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Production
+        run: |
+          ssh tome-production@${{ secrets.PROD_IP }} << 'EOF'
+            cd tome-infra
+          
+            echo "Esperando a que el daemon de Docker esté disponible..."
+            for i in {1..30}; do
+              # Si systemd está presente, chequea el servicio
+              if sudo systemctl is-active --quiet docker 2>/dev/null; then
+                echo "docker activo (systemctl)"
+                break
+              fi
+              # Si no, intenta una llamada directa al cliente Docker
+              if sudo docker info >/dev/null 2>&1; then
+                echo "docker respondiendo (docker info)"
+                break
+              fi
+              echo "Intento $i/30: docker no listo, esperando 5s..."
+              sleep 5
+            done
+          
+            sudo su
+            docker compose -f docker-compose.prod.yaml down backend
+            docker-compose -f docker-compose.prod.yaml pull backend
+            docker-compose -f docker-compose.prod.yaml up -d backend
+            docker image prune -f
+          EOF
+
+#       - name: Deallocate Azure VM
+#         if: always()
+#         uses: roel4ez/action-power-on-off-azure-vm@v1.0.1
+#         with:
+#           AZURE_VM_NAME: ${{ secrets.AZURE_PROD_VM_NAME }}
+#           AZURE_RG_NAME: ${{ secrets.AZURE_RG_NAME }}
+#           POWER_SWITCH: 'DEALLOCATE'
+#           AZURE_SP_CLIENTID: ${{ secrets.AZURE_SP_CLIENTID }}
+#           AZURE_SP_SECRET: ${{ secrets.AZURE_SP_SECRET }}
+#           AZURE_TENANTID: ${{ secrets.AZURE_TENANTID }}

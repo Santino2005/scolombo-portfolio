@@ -1,0 +1,34 @@
+meta {
+  name: update book state
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BookClubUrl}}/:bookClubId/book/:bookId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  bookId: {{bookId}}
+  bookClubId: {{bookClubId}}
+}
+
+body:json {
+  {
+    /* 
+    Status can be:
+      PROPOSED
+      REJECTED
+      SELECTED
+      FINISHED
+    */
+    "status" : "SELECTED"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

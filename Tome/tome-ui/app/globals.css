@@ -1,0 +1,348 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@source './**/*.{js,ts,jsx,tsx}';
+@source '../components/**/*.{js,ts,jsx,tsx}';
+@source '../lib/**/*.{js,ts,jsx,tsx}';
+
+/* 1) Design System (DS) base: definir tokens en :root (prefijo --ds-*) */
+:root {
+  /* Radios base */
+  --radius: 0.625rem;
+
+  /* Paleta DS (claro) */
+  --ds-primary-100: rgba(222, 226, 237, 1);
+  --ds-primary-200: rgba(190, 198, 218, 1);
+  --ds-primary-300: rgba(137, 152, 189, 1);
+  --ds-primary-400: rgba(108, 127, 173, 1);
+  --ds-primary-500: rgba(75, 92, 134, 1);
+  --ds-primary-600: rgba(57, 70, 102, 1);
+  --ds-primary-700: rgba(37, 45, 65, 1);
+  --ds-primary-800: rgba(20, 25, 36, 1);
+
+  --ds-neutral-100: rgba(235, 230, 224, 1);
+  --ds-neutral-200: rgba(216, 206, 192, 1);
+  --ds-neutral-300: rgba(184, 166, 142, 1);
+  --ds-neutral-400: rgba(165, 138, 114, 1);
+  --ds-neutral-500: rgba(130, 98, 78, 1);
+  --ds-neutral-600: rgba(119, 73, 40, 1);
+  --ds-neutral-700: rgba(83, 39, 19, 1);
+  --ds-neutral-800: rgba(45, 21, 10, 1);
+  --ds-neutral-shadow-500: rgba(45, 21, 10, 0.2);
+  --ds-neutral-shadow-800: rgba(45, 21, 10, 0.6);
+
+  --ds-success-100: rgba(224, 235, 226, 1);
+  --ds-success-200: rgba(194, 214, 197, 1);
+  --ds-success-300: rgba(145, 182, 151, 1);
+  --ds-success-400: rgba(117, 163, 125, 1);
+  --ds-success-500: rgba(83, 126, 91, 1);
+  --ds-success-600: rgba(63, 95, 69, 1);
+  --ds-success-700: rgba(44, 60, 42, 1);
+  --ds-success-800: rgba(24, 33, 23, 1);
+
+  --ds-warning-100: rgba(248, 235, 211, 1);
+  --ds-warning-200: rgba(240, 216, 168, 1);
+  --ds-warning-300: rgba(229, 184, 98, 1);
+  --ds-warning-400: rgba(222, 167, 58, 1);
+  --ds-warning-500: rgba(179, 129, 30, 1);
+  --ds-warning-600: rgba(136, 97, 23, 1);
+  --ds-warning-700: rgba(78, 58, 24, 1);
+  --ds-warning-800: rgba(43, 32, 13, 1);
+
+  --ds-error-100: rgba(244, 215, 216, 1);
+  --ds-error-200: rgba(232, 176, 177, 1);
+  --ds-error-300: rgba(214, 112, 114, 1);
+  --ds-error-400: rgba(204, 76, 78, 1);
+  --ds-error-500: rgba(163, 46, 48, 1);
+  --ds-error-600: rgba(123, 35, 36, 1);
+  --ds-error-700: rgba(100, 4, 2, 1);
+  --ds-error-800: rgba(55, 2, 1, 1);
+
+  /* Tipografías DS */
+  --font-sans: 'Roboto', Helvetica, Arial, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  /* 2) Variables semánticas (shadcn) basadas en DS */
+  --background: var(--ds-neutral-100);
+  --foreground: var(--ds-neutral-800);
+
+  --card: var(--ds-neutral-100);
+  --card-foreground: var(--ds-neutral-800);
+
+  --popover: var(--ds-neutral-100);
+  --popover-foreground: var(--ds-neutral-800);
+
+  --primary: var(--ds-primary-500);
+  --primary-foreground: var(--ds-primary-100);
+
+  --secondary: var(--ds-neutral-200);
+  --secondary-foreground: var(--ds-neutral-800);
+
+  --muted: var(--ds-neutral-200);
+  --muted-foreground: var(--ds-neutral-400);
+
+  --accent: var(--ds-neutral-200);
+  --accent-foreground: var(--ds-neutral-800);
+
+  --destructive: var(--ds-error-500);
+  --destructive-foreground: var(--ds-error-100);
+
+  --border: var(--ds-neutral-300);
+  --input: var(--ds-neutral-400);
+  --ring: var(--ds-primary-400);
+
+  /* Charts y sidebar (opcionales) */
+  --chart-1: var(--ds-primary-500);
+  --chart-2: var(--ds-success-500);
+  --chart-3: var(--ds-warning-500);
+  --chart-4: var(--ds-primary-300);
+  --chart-5: var(--ds-error-500);
+
+  --sidebar: var(--ds-neutral-200);
+  --sidebar-foreground: var(--ds-neutral-800);
+  --sidebar-primary: var(--ds-neutral-500);
+  --sidebar-primary-foreground: var(--ds-primary-100);
+  --sidebar-accent: var(--ds-neutral-300);
+  --sidebar-accent-foreground: var(--ds-neutral-800);
+  --sidebar-border: var(--ds-neutral-400);
+  --sidebar-ring: var(--ds-primary-400);
+
+  /* Spacing DS */
+  --ds-spacing-xs: 4px;
+  --ds-spacing-s: 8px;
+  --ds-spacing-m: 16px;
+  --ds-spacing-l: 24px;
+  --ds-spacing-xl: 32px;
+  --ds-spacing-xxl: 40px;
+  --ds-spacing-xxxl: 48px;
+  --ds-spacing-book-sm: 125px;
+  --ds-spacing-book-md: 175px;
+  --ds-spacing-book-lg: 225px;
+}
+
+/* 3) Tema oscuro (no aplica de momento a la app)*/
+.dark {
+  --background: var(--ds-neutral-800);
+  --foreground: var(--ds-neutral-100);
+  --card: var(--ds-neutral-800);
+  --card-foreground: var(--ds-neutral-100);
+  --popover: var(--ds-neutral-800);
+  --popover-foreground: var(--ds-neutral-100);
+  --primary: var(--ds-primary-300);
+  --primary-foreground: var(--ds-neutral-800);
+  --secondary: var(--ds-neutral-700);
+  --secondary-foreground: var(--ds-neutral-100);
+  --muted: var(--ds-neutral-700);
+  --muted-foreground: var(--ds-neutral-300);
+  --accent: var(--ds-neutral-700);
+  --accent-foreground: var(--ds-neutral-100);
+  --destructive: var(--ds-error-400);
+  --destructive-foreground: var(--ds-neutral-100);
+  --border: var(--ds-neutral-600);
+  --input: var(--ds-neutral-600);
+  --ring: var(--ds-primary-300);
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+/* 4) Exponer tokens Tailwind v4 a partir de semánticos (shadcn) */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Tipografías */
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-button-neutral: var(--ds-neutral-500);
+  --color-button-disabled-neutral: var(--ds-neutral-200);
+
+  --spacing-xs: var(--ds-spacing-xs);
+  --spacing-s: var(--ds-spacing-s);
+  --spacing-m: var(--ds-spacing-m);
+  --spacing-l: var(--ds-spacing-l);
+  --spacing-xl: var(--ds-spacing-xl);
+  --spacing-xxl: var(--ds-spacing-xxl);
+  --spacing-xxxl: var(--ds-spacing-xxxl);
+  --spacing-book-sm: var(--ds-spacing-book-sm);
+  --spacing-book-md: var(--ds-spacing-book-md);
+  --spacing-book-lg: var(--ds-spacing-book-lg);
+}
+
+/* 5) Base Tailwind + shadcn */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Ocultar controles nativos del input search (evitar la X por defecto) */
+  input[type='search']::-webkit-search-cancel-button,
+  input[type='search']::-webkit-search-decoration,
+  input[type='search']::-webkit-search-results-button,
+  input[type='search']::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+  input[type='search']::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+/* Utilidades tipográficas equivalentes en capa utilities para override fiable sobre shadcn */
+@layer utilities {
+  .u-text-display-large {
+    font-size: 57px;
+    line-height: 64px;
+    font-weight: 400;
+    letter-spacing: -0.25px;
+  }
+  .u-text-display-medium {
+    font-size: 45px;
+    line-height: 52px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  .u-text-display-small {
+    font-size: 36px;
+    line-height: 44px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+
+  .u-text-headline-large {
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  .u-text-headline-medium {
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  .u-text-headline-small {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+
+  .u-text-title-large {
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  .u-text-title-medium {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    letter-spacing: 0.15px;
+  }
+  .u-text-title-small {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+  }
+
+  .u-text-body-large {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .u-text-body-medium {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0.25px;
+  }
+  .u-text-body-small {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+
+  .u-text-label-large {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+  }
+  .u-text-label-medium {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .u-text-label-small {
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* Grid para portadas: columnas de ancho fijo igual a la portada del libro que auto-envuelven sin estirarse */
+  .grid-covers {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(var(--spacing-book-md), var(--spacing-book-md))
+    );
+    justify-content: start;
+  }
+}
