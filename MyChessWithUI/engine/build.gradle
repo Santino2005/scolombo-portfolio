@@ -1,0 +1,34 @@
+plugins {
+    id 'application-conventions'
+    id("org.openjfx.javafxplugin").version("0.0.13")
+
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/austral-ingsis/chess-test-framework")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.apache.commons:commons-text'
+    implementation("edu.austral.dissis.chess:chess-ui:3.0.1")
+    testImplementation 'edu.austral.dissis.chess:test-framework:1.7.0'
+}
+
+javafx {
+    version = "21"
+    modules = ["javafx.graphics", "javafx.controls"]
+}
+
+application {
+    // Define the main class for the application.
+  // mainClass = 'edu.austral.dissis.chess.engine.Chess.gui.ChessGameApplication'
+    mainClass = 'edu.austral.dissis.chess.engine.Commons.GameAndAdapters.ChessGameApplication'
+    //mainClass = 'edu.austral.dissis.chess.ui.MainKt'
+}

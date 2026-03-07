@@ -1,0 +1,18 @@
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="corretto-21" project-jdk-type="JavaSDK" />
+  <component name="SuppressKotlinCodeStyleNotification">
+    <option name="disableForAll" value="true" />
+  </component>
+  <component name="com.github.lipiridi.spotless.applier.ui.settings.ModuleSettingsState">
+    <option name="selectedModules">
+      <list>
+        <option value="chess.engine" />
+        <option value="chess.buildSrc" />
+      </list>
+    </option>
+  </component>
+</project>

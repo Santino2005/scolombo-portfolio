@@ -1,0 +1,105 @@
+@startuml
+class board {
+  + colorToPlay: Color
+  + cells : Map<Position, Piece>
+  + rules : Rules
+}
+
+class User {
+  + color : Color
+  + name : String
+  + move() : Board
+  + getColor() : Color
+}
+
+class Position {
+  + row : int
+  + column : int
+  + getRow()
+  + getColumn()
+}
+
+enum color {
+  + WHITE
+  + BLACK
+}
+
+class GameFactory{
+  + createClassicBoard() : Board
+}
+
+interface Rules{
+  + validMove() : boolean
+  + starterPlayer : Color
+}
+
+class OriginalRules{
+  + validMove() : boolean
+  - validPosition() :  
+  + starterPlayer() : Color
+}
+
+interface BoardOrganization{
+  + create() : HashMap<Position, Piece>
+}
+
+class ClassicBoard{
+  + create() : HashMap<Position, Piece>
+}
+
+interface piece { 
+  + getColor() : color
+  + validmove(): boolean
+}
+
+class pawn {
+  + getColor() : Color
+  + validmove() : boolean
+}
+
+class bishop {  
+  + getColor() : Color
+  + validmove() : boolean
+}
+
+class king {  
+  + getColor() : Color
+  + validmove() : boolean
+}
+
+class queen {   
+  + getColor() : Color
+  + validmove() : boolean
+}
+
+class rook {
+  + getColor() : Color
+  + validmove() : boolean
+}
+
+class knight {
+  + getColor() : Color
+  + validmove() : boolean
+}
+
+piece <-- pawn
+piece <-- knight
+piece <-- king
+piece <-- bishop
+piece <-- queen
+piece <-- rook
+Position <-- board
+board <-- GameFactory
+color <-- User
+color <-- piece
+Rules <-- board
+OriginalRules --> Rules
+GameFactory --> Rules
+GameFactory --> BoardOrganization
+ClassicBoard --> BoardOrganization
+board --> color
+User --> board
+
+
+
+@enduml
