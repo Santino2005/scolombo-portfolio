@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { Mail, Phone, MapPin, Send, Github, Linkedin } from "lucide-react";
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
+    if (!form.name || !form.message) {
       setStatus("error");
       return;
     }
@@ -29,7 +29,7 @@ export default function Contact() {
     window.open(gmailUrl, "_blank");
 
     setStatus("success");
-    setForm({ name: "", email: "", message: "" });
+    setForm({ name: "", message: "" });
   };
 
   return (
@@ -132,19 +132,6 @@ export default function Contact() {
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label htmlFor="email" className="text-xs font-bold text-foreground/80 tracking-wider uppercase">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="john@example.com"
-                  className="w-full px-4 py-3 bg-white border border-border/50 rounded-xl text-sm focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all text-foreground"
-                />
-              </div>
 
               <div className="space-y-1.5">
                 <label htmlFor="message" className="text-xs font-bold text-foreground/80 tracking-wider uppercase">
