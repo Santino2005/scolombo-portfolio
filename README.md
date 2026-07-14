@@ -59,8 +59,13 @@ These practices ensure systems remain reliable, scalable, and maintainable.
 
 ## Mobile Development
 
-- **Learning Android development** with **Kotlin** and **Jetpack Compose**  
-- Beginner in mobile development, building foundational skills
+### ZeroDebt – Android Expense Sharing App
+- **Repository Path:** [MobileApp/](file:///home/elchurro274/Faculty/PortFolio/scolombo-portfolio/MobileApp)
+- **APK Download:** [zeroDebt-SC.apk](file:///home/elchurro274/Faculty/PortFolio/scolombo-portfolio/MobileApp/zeroDebt-SC.apk)
+- **Technologies:** Kotlin, Jetpack Compose, Material Design 3, MVVM Architecture
+
+An Android application designed to help users manage and split shared expenses in a simple and transparent way. Keeps track of who paid for what and calculates how much each participant owes, making debt management effortless.
+- Features: Expense tracking, Group management, Debt calculation, Settlement tracking.
 
 ---
 

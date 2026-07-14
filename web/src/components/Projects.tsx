@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { FolderGit2, ExternalLink, ListChecks } from "lucide-react";
+import { FolderGit2, ExternalLink, ListChecks, Download } from "lucide-react";
 
 export default function Projects() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -20,6 +20,22 @@ export default function Projects() {
       ],
       repo: "https://github.com/Santino2005/scolombo-portfolio",
       demo: "https://bravitoapp.vercel.app/login",
+    },
+    {
+      title: "ZeroDebt - Expense Sharing & Debt Tracker",
+      category: "Android Mobile App",
+      importance: "Principal",
+      description: "An Android application designed to help users manage and split shared expenses in a simple and transparent way. Keeps track of who paid for what and calculates how much each participant owes, making debt management effortless.",
+      tech: ["Kotlin", "Jetpack Compose", "Material Design 3", "MVVM Architecture", "Navigation Compose", "ViewModel", "State Management"],
+      features: [
+        "Expense Tracking: Record shared expenses with descriptions, amounts, dates, and the person who paid.",
+        "Group Management: Create and manage groups for trips, roommates, events, or any shared activity.",
+        "Debt Calculation: Automatically calculate balances and display exactly who owes whom.",
+        "Settlement Tracking: Mark debts as settled and keep a history of completed payments.",
+      ],
+      repo: "https://github.com/Santino2005/scolombo-portfolio/tree/main/MobileApp",
+      demo: null,
+      download: "/zeroDebt-SC.apk",
     },
     {
       title: "Tome - Library & Book Club Management Platform",
@@ -232,6 +248,16 @@ export default function Projects() {
                       >
                         <ExternalLink size={14} />
                         Demo
+                      </a>
+                    ) : null}
+                    {"download" in project && project.download ? (
+                      <a
+                        href={project.download}
+                        download
+                        className="text-xs font-bold text-accent hover:text-accent/80 flex items-center gap-1 transition-colors"
+                      >
+                        <Download size={14} />
+                        Download APK
                       </a>
                     ) : null}
                   </div>
