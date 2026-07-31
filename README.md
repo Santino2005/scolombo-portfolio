@@ -6,6 +6,10 @@ A collection of my personal and academic projects, showcasing experience in soft
 
 ---
 
+**Personal Website**
+https://scolombo-portfolio3.vercel.app/
+
+---
 ## About Me
 
 I am a **Full-Stack Developer** and **Computer Engineering student** at **Universidad Austral, Pilar**, currently in my fourth year, with experience building scalable applications and backend services.
