@@ -1,8 +1,8 @@
 # Build Stage
-FROM gradle:8.12-jdk21-alpine AS builder
+FROM gradle:jdk21-alpine AS builder
 WORKDIR /app
-COPY build.gradle settings.gradle /app/
-COPY src /app/src
+COPY build.gradle settings.gradle ./
+COPY src ./src
 RUN gradle clean bootJar --no-daemon -x test
 
 # Runtime Stage
