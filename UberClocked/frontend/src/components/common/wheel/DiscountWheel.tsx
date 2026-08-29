@@ -5,12 +5,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { getWheelPrizes, type WheelPrize, type WheelSpinResponse } from "@/services/wheelApi";
 import { Link } from "react-router-dom";
 
-export const DEFAULT_SEGMENTS: { label: string; discount: number; color: string; textColor: string; accentColor: string }[] = [
-    { label: "5% OFF", discount: 5, color: "#1e293b", textColor: "#f8fafc", accentColor: "#f97316" },
-    { label: "10% OFF", discount: 10, color: "#0f172a", textColor: "#f8fafc", accentColor: "#38bdf8" },
-    { label: "15% OFF", discount: 15, color: "#1e293b", textColor: "#f8fafc", accentColor: "#a855f7" },
-    { label: "20% OFF", discount: 20, color: "#0f172a", textColor: "#f8fafc", accentColor: "#10b981" },
-    { label: "25% OFF", discount: 25, color: "#1e293b", textColor: "#f8fafc", accentColor: "#eab308" },
+export const DEFAULT_SEGMENTS = [
+    { label: "5% OFF", discount: 5, color: "#18181b", textColor: "#f4f4f5", accentColor: "#f97316" },
+    { label: "10% OFF", discount: 10, color: "#09090b", textColor: "#f4f4f5", accentColor: "#06b6d4" },
+    { label: "15% OFF", discount: 15, color: "#18181b", textColor: "#f4f4f5", accentColor: "#a855f7" },
+    { label: "20% OFF", discount: 20, color: "#09090b", textColor: "#f4f4f5", accentColor: "#10b981" },
+    { label: "25% OFF", discount: 25, color: "#18181b", textColor: "#f4f4f5", accentColor: "#eab308" },
     { label: "50% OFF", discount: 50, color: "#ea580c", textColor: "#ffffff", accentColor: "#fbbf24" },
 ];
 
@@ -65,11 +65,11 @@ export default function DiscountWheel({
                 const fetched = await getWheelPrizes();
                 if (mounted && fetched && fetched.length > 0) {
                     const colors = [
-                        { color: "#1e293b", textColor: "#f8fafc", accentColor: "#f97316" },
-                        { color: "#0f172a", textColor: "#f8fafc", accentColor: "#38bdf8" },
-                        { color: "#1e293b", textColor: "#f8fafc", accentColor: "#a855f7" },
-                        { color: "#0f172a", textColor: "#f8fafc", accentColor: "#10b981" },
-                        { color: "#1e293b", textColor: "#f8fafc", accentColor: "#eab308" },
+                        { color: "#18181b", textColor: "#f4f4f5", accentColor: "#f97316" },
+                        { color: "#09090b", textColor: "#f4f4f5", accentColor: "#06b6d4" },
+                        { color: "#18181b", textColor: "#f4f4f5", accentColor: "#a855f7" },
+                        { color: "#09090b", textColor: "#f4f4f5", accentColor: "#10b981" },
+                        { color: "#18181b", textColor: "#f4f4f5", accentColor: "#eab308" },
                         { color: "#ea580c", textColor: "#ffffff", accentColor: "#fbbf24" },
                     ];
                     const mapped = fetched.map((p, i) => {
@@ -119,9 +119,10 @@ export default function DiscountWheel({
             );
             if (targetIndex === -1) targetIndex = 0;
 
-            // Calculate precise angle so that target segment center lands exactly at 0 deg (12 o'clock)
+            // Exact calculation: center of segment targetIndex relative to 12 o'clock (0 deg)
             const segmentCenterAngle = (targetIndex + 0.5) * sliceAngle;
-            const alignAngle = (360 - segmentCenterAngle) % 360;
+            // Angle to align segment center with 12 o'clock needle after clockwise rotation
+            const alignAngle = (360 - (segmentCenterAngle % 360)) % 360;
 
             const extraSpins = 6;
             const baseRot = Math.ceil(currentRotation / 360) * 360;
@@ -173,32 +174,35 @@ export default function DiscountWheel({
     const isLocked = !canSpin || (countdown !== null && countdown > 0);
 
     return (
-        <div className="w-full max-w-md mx-auto flex flex-col items-center">
+        <div className="w-full max-w-md mx-auto flex flex-col items-center select-none">
             {/* Outer Roulette Container with Glowing Ring */}
-            <div className="relative w-72 h-72 sm:w-84 sm:h-84 my-4 flex items-center justify-center">
+            <div className="relative w-72 h-72 sm:w-88 sm:h-88 my-4 flex items-center justify-center">
                 {/* Neon Glow backdrop */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-500/20 via-amber-500/30 to-purple-500/20 blur-xl animate-pulse" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-500/30 via-amber-500/20 to-purple-600/20 blur-2xl animate-pulse" />
 
-                {/* Outer Bezel */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-zinc-700 via-zinc-900 to-black p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.6),0_0_30px_rgba(249,115,22,0.2)] border border-white/10 flex items-center justify-center">
-                    {/* Top Pointer Needle */}
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
-                        <div className="w-0 h-0 border-l-12 border-r-12 border-t-22 border-l-transparent border-r-transparent border-t-orange-500" />
-                        <div className="w-3 h-3 -mt-6 rounded-full bg-white shadow-md border-2 border-orange-600" />
+                {/* Outer Bezel Ring */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-zinc-800 via-zinc-950 to-black p-3 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(249,115,22,0.25)] border-2 border-zinc-700/80 flex items-center justify-center">
+                    {/* Top Pointer Needle (Fixed at 12 o'clock) */}
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+                        <div className="w-0 h-0 border-l-[14px] border-r-[14px] border-t-[26px] border-l-transparent border-r-transparent border-t-orange-500" />
+                        <div className="w-3.5 h-3.5 -mt-7 rounded-full bg-white shadow-md border-2 border-orange-600 ring-2 ring-orange-400/50" />
                     </div>
 
-                    {/* Rotating Wheel Element with SVG Slices */}
+                    {/* Rotating Wheel Element */}
                     <div
                         ref={wheelRef}
-                        className="relative w-full h-full rounded-full overflow-hidden shadow-inner border-2 border-zinc-950/60"
-                        style={{ transformOrigin: "center center" }}
+                        className="relative w-full h-full rounded-full overflow-hidden shadow-inner border border-zinc-800"
+                        style={{ transformOrigin: "50% 50%" }}
                     >
-                        <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
+                        <svg viewBox="0 0 100 100" className="w-full h-full block">
+                            {/* SVG Slices */}
                             {prizes.map((p, index) => {
                                 const startAngle = index * sliceAngle;
                                 const endAngle = (index + 1) * sliceAngle;
-                                const startRad = (startAngle * Math.PI) / 180;
-                                const endRad = (endAngle * Math.PI) / 180;
+
+                                // Angle clockwise from top (12 o'clock)
+                                const startRad = ((startAngle - 90) * Math.PI) / 180;
+                                const endRad = ((endAngle - 90) * Math.PI) / 180;
 
                                 const x1 = 50 + 50 * Math.cos(startRad);
                                 const y1 = 50 + 50 * Math.sin(startRad);
@@ -212,65 +216,102 @@ export default function DiscountWheel({
                                         key={`slice-${index}`}
                                         d={pathData}
                                         fill={p.color}
-                                        stroke="#09090b"
+                                        stroke="#27272a"
+                                        strokeWidth="0.75"
+                                    />
+                                );
+                            })}
+
+                            {/* Spoke Dividers with Accent Lines */}
+                            {prizes.map((p, index) => {
+                                const angle = index * sliceAngle;
+                                const rad = ((angle - 90) * Math.PI) / 180;
+                                const x = 50 + 50 * Math.cos(rad);
+                                const y = 50 + 50 * Math.sin(rad);
+
+                                return (
+                                    <line
+                                        key={`spoke-${index}`}
+                                        x1="50"
+                                        y1="50"
+                                        x2={x}
+                                        y2={y}
+                                        stroke="#3f3f46"
                                         strokeWidth="0.8"
                                     />
                                 );
                             })}
+
+                            {/* Text Labels inside each segment */}
+                            {prizes.map((p, index) => {
+                                const midAngle = (index + 0.5) * sliceAngle;
+
+                                return (
+                                    <g
+                                        key={`text-group-${index}`}
+                                        transform={`rotate(${midAngle}, 50, 50)`}
+                                    >
+                                        {/* Label text placed along radial line */}
+                                        <text
+                                            x="50"
+                                            y="17"
+                                            textAnchor="middle"
+                                            dominantBaseline="middle"
+                                            fill={p.textColor}
+                                            fontSize="4.8"
+                                            fontWeight="900"
+                                            letterSpacing="0.05em"
+                                            style={{
+                                                textShadow: `0 0 6px ${p.accentColor}90`,
+                                                fontFamily: "system-ui, -apple-system, sans-serif",
+                                            }}
+                                        >
+                                            {p.label}
+                                        </text>
+
+                                        {/* Accent Dot */}
+                                        <circle
+                                            cx="50"
+                                            cy="25"
+                                            r="1.2"
+                                            fill={p.accentColor}
+                                        />
+                                    </g>
+                                );
+                            })}
+
+                            {/* Outer Rim Ring */}
+                            <circle
+                                cx="50"
+                                cy="50"
+                                r="49"
+                                fill="none"
+                                stroke="#f97316"
+                                strokeWidth="0.75"
+                                strokeOpacity="0.4"
+                            />
                         </svg>
 
-                        {/* Slice Labels and Accents */}
-                        {prizes.map((p, index) => {
-                            const midAngle = (index + 0.5) * sliceAngle;
-                            const rad = (midAngle * Math.PI) / 180;
-                            // Position label along radius
-                            const radiusFactor = 32;
-                            const x = 50 + radiusFactor * Math.sin(rad);
-                            const y = 50 - radiusFactor * Math.cos(rad);
-
-                            return (
-                                <div
-                                    key={`label-${index}`}
-                                    className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center pointer-events-none select-none"
-                                    style={{
-                                        left: `${x}%`,
-                                        top: `${y}%`,
-                                        transform: `translate(-50%, -50%) rotate(${midAngle}deg)`,
-                                    }}
-                                >
-                                    <span
-                                        className="text-[11px] sm:text-xs font-black tracking-tighter uppercase px-1.5 py-0.5 rounded shadow-sm"
-                                        style={{
-                                            color: p.textColor,
-                                            textShadow: `0 0 8px ${p.accentColor}80`,
-                                        }}
-                                    >
-                                        {p.label}
-                                    </span>
-                                </div>
-                            );
-                        })}
-
-                        {/* Glossy Overlay */}
+                        {/* Subtle Radial Gradient Overlay */}
                         <div
-                            className="absolute inset-0 rounded-full pointer-events-none opacity-30"
+                            className="absolute inset-0 rounded-full pointer-events-none opacity-25"
                             style={{
-                                background: "radial-gradient(circle at 35% 25%, rgba(255,255,255,0.7) 0%, transparent 60%)",
+                                background: "radial-gradient(circle at 35% 25%, rgba(255,255,255,0.6) 0%, transparent 60%)",
                             }}
                         />
                     </div>
 
-                    {/* Center Hub with UberClocked Icon */}
-                    <div className="absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-b from-zinc-800 to-zinc-950 border-3 border-orange-500/80 shadow-[0_4px_16px_rgba(0,0,0,0.8)] flex flex-col items-center justify-center z-20">
+                    {/* Center Hub with Spin Button Badge */}
+                    <div className="absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950 border-3 border-orange-500 shadow-[0_6px_20px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center z-20 pointer-events-none">
                         <Sparkles className="w-5 h-5 text-orange-400 animate-spin" style={{ animationDuration: "12s" }} />
-                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-orange-400 mt-0.5">
-                            SPIN
+                        <span className="text-[9px] font-black uppercase tracking-widest text-orange-400 mt-0.5">
+                            ROLL
                         </span>
                     </div>
 
                     {/* Lock overlay if on cooldown */}
                     {isLocked && (
-                        <div className="absolute inset-0 rounded-full bg-zinc-950/70 backdrop-blur-[2px] z-25 flex flex-col items-center justify-center p-4 text-center">
+                        <div className="absolute inset-0 rounded-full bg-zinc-950/80 backdrop-blur-xs z-25 flex flex-col items-center justify-center p-4 text-center">
                             <Clock className="w-8 h-8 text-orange-400 mb-1 animate-pulse" />
                             <span className="text-xs font-bold text-white uppercase tracking-wider">Next Spin In</span>
                             <span className="text-sm font-black text-orange-400 font-mono">
@@ -285,7 +326,7 @@ export default function DiscountWheel({
             <div className="w-full px-2 mt-4 space-y-3">
                 <Button
                     size="lg"
-                    className="w-full py-6 text-base font-extrabold tracking-wide uppercase rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/25 border border-orange-400/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+                    className="w-full py-6 text-base font-extrabold tracking-wide uppercase rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-xl shadow-orange-500/25 border border-orange-400/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                     onClick={handleSpin}
                     disabled={disabled || isLocked || spinning}
                 >
@@ -305,7 +346,7 @@ export default function DiscountWheel({
                 </Button>
 
                 {error && (
-                    <div className="flex items-center gap-2 p-3 rounded-lg border border-red-500/40 bg-red-500/10 text-red-400 text-xs">
+                    <div className="flex items-center gap-2 p-3 rounded-xl border border-red-500/40 bg-red-500/10 text-red-400 text-xs">
                         <AlertCircle className="w-4 h-4 shrink-0" />
                         <span>{error}</span>
                     </div>
@@ -314,7 +355,7 @@ export default function DiscountWheel({
 
             {/* Winner Announcement Modal Popup */}
             <Dialog open={showPrizeModal} onOpenChange={setShowPrizeModal}>
-                <DialogContent className="sm:max-w-md bg-zinc-950 border border-orange-500/40 text-white shadow-2xl p-6 rounded-2xl">
+                <DialogContent className="sm:max-w-md bg-zinc-950 border border-orange-500/40 text-white shadow-2xl p-6 rounded-3xl">
                     <DialogHeader className="text-center space-y-2">
                         <div className="mx-auto w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/30">
                             <Gift className="w-8 h-8 text-white" />
@@ -329,7 +370,7 @@ export default function DiscountWheel({
 
                     {wonPrize && (
                         <div className="space-y-4 my-2">
-                            <div className="text-center py-4 px-6 rounded-xl bg-zinc-900/90 border border-zinc-800 shadow-inner">
+                            <div className="text-center py-4 px-6 rounded-2xl bg-zinc-900/90 border border-zinc-800 shadow-inner">
                                 <div className="text-xs uppercase tracking-widest font-bold text-orange-400 mb-1">
                                     Your Prize
                                 </div>

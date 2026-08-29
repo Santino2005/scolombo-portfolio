@@ -30,6 +30,7 @@ import {
 import logo from "../../../stories/assets/uberClocked(Only_logo).png";
 import { useNavBarLogic } from "./NavBar.hook";
 import WheelModalDialog from "@/components/common/wheel/WheelModalDialog";
+import ThemeSwitcher from "@/components/common/theme/ThemeSwitcher";
 
 export default function NavBar() {
     const { loginWithRedirect, isAuthenticated, isLoading, isAdmin } = useNavBarLogic();
@@ -169,8 +170,11 @@ export default function NavBar() {
                             )}
                         </div>
 
-                        {/* Right Actions: Cart & User Avatar / Login */}
-                        <div className="flex items-center gap-3">
+                        {/* Right Actions: Theme Switcher, Cart & User Avatar / Login */}
+                        <div className="flex items-center gap-2.5 sm:gap-3">
+                            {/* Color / Theme Switcher */}
+                            <ThemeSwitcher />
+
                             {/* Cart Icon Link */}
                             {isAuthenticated && (
                                 <Link
