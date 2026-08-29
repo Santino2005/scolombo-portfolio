@@ -41,7 +41,8 @@ public class CompanyController {
   }
 
   @PatchMapping("/{id}")
-  public CompanyDataDto updateCompany(@PathVariable UUID id, @Valid @RequestBody CompanyDataDto dto) {
+  public CompanyDataDto updateCompany(
+      @PathVariable UUID id, @Valid @RequestBody CompanyDataDto dto) {
     return mapper.toDto(companyService.updateCompany(id, dto, mapper));
   }
 

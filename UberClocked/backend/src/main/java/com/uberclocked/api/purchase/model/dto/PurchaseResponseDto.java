@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.UUID;
 
 public record PurchaseResponseDto(
-        UUID id,
-        PurchaseStatus status,
-        Double totalAmount,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt,
-        LocalDateTime pickupDate,
-        UUID cartId,
-        List<CartItemDto> items
-) {}
+    UUID id,
+    PurchaseStatus status,
+    Double totalAmount,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt,
+    LocalDateTime pickupDate,
+    UUID cartId,
+    List<CartItemDto> items) {}

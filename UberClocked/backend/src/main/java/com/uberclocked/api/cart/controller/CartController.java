@@ -3,19 +3,15 @@ package com.uberclocked.api.cart.controller;
 import com.uberclocked.api.cart.mapper.CartMapper;
 import com.uberclocked.api.cart.model.dto.AddCartItemDto;
 import com.uberclocked.api.cart.model.dto.CartDto;
-import com.uberclocked.api.cart.model.dto.CartItemDto;
 import com.uberclocked.api.cart.model.dto.UpdateCartItemComponentsDto;
-import com.uberclocked.api.cart.model.entity.Cart;
 import com.uberclocked.api.cart.model.entity.CartItem;
 import com.uberclocked.api.cart.service.CartService;
-import java.util.UUID;
-
 import com.uberclocked.api.product.model.entity.Product;
 import com.uberclocked.api.product.service.ProductService;
 import com.uberclocked.api.promotion.model.dto.ApplyCouponRequest;
 import com.uberclocked.api.promotion.service.CartPromotionService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import java.util.UUID;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +33,11 @@ public class CartController {
   private final CartMapper mapper;
   private final CartPromotionService cartPromotionService;
 
-  public CartController(CartService cartService, ProductService productService, CartMapper mapper, CartPromotionService cartPromotionService) {
+  public CartController(
+      CartService cartService,
+      ProductService productService,
+      CartMapper mapper,
+      CartPromotionService cartPromotionService) {
     this.cartService = cartService;
     this.productService = productService;
     this.mapper = mapper;
@@ -50,9 +50,7 @@ public class CartController {
   }
 
   @PostMapping("/me/items")
-  public CartDto addItem(
-      @AuthenticationPrincipal Jwt jwt,
-      @RequestBody AddCartItemDto dto) {
+  public CartDto addItem(@AuthenticationPrincipal Jwt jwt, @RequestBody AddCartItemDto dto) {
 
     return mapper.toDto(
         cartService.addItem(jwt, dto.productSku(), dto.quantity(), dto.components()));
@@ -60,9 +58,7 @@ public class CartController {
 
   @PatchMapping("/me/items/{itemId}")
   public CartDto updateItem(
-          @PathVariable UUID itemId,
-          @RequestParam Integer quantity,
-          @AuthenticationPrincipal Jwt jwt) {
+      @PathVariable UUID itemId, @RequestParam Integer quantity, @AuthenticationPrincipal Jwt jwt) {
 
     cartService.setItemQuantity(jwt, itemId, quantity);
     return mapper.toDto(cartService.getOrCreateActiveCart(jwt));
@@ -70,10 +66,10 @@ public class CartController {
 
   @PatchMapping("/me/items/{itemId}/components")
   public CartDto updateComponent(
-          @PathVariable UUID itemId,
-          @RequestParam String componentType,
-          @RequestParam String newProductSku,
-          @AuthenticationPrincipal Jwt jwt) {
+      @PathVariable UUID itemId,
+      @RequestParam String componentType,
+      @RequestParam String newProductSku,
+      @AuthenticationPrincipal Jwt jwt) {
 
     cartService.updateComponentInItem(jwt, itemId, componentType, newProductSku);
     return mapper.toDto(cartService.getOrCreateActiveCart(jwt));
@@ -84,7 +80,6 @@ public class CartController {
     cartService.removeItem(jwt, itemId);
     return mapper.toDto(cartService.getOrCreateActiveCart(jwt));
   }
-
 
   @PostMapping("/me/checkout")
   public CartDto checkout(@AuthenticationPrincipal Jwt jwt) {
@@ -107,9 +102,9 @@ public class CartController {
 
   @PatchMapping("/me/items/{itemId}/components/bulk")
   public CartDto replaceComponents(
-          @PathVariable UUID itemId,
-          @RequestBody UpdateCartItemComponentsDto dto,
-          @AuthenticationPrincipal Jwt jwt) {
+      @PathVariable UUID itemId,
+      @RequestBody UpdateCartItemComponentsDto dto,
+      @AuthenticationPrincipal Jwt jwt) {
 
     cartService.replaceComponents(jwt, itemId, dto.components());
     return mapper.toDto(cartService.getOrCreateActiveCart(jwt));
@@ -119,7 +114,7 @@ public class CartController {
   public CartDto apply(@AuthenticationPrincipal Jwt jwt, @RequestBody ApplyCouponRequest req) {
     try {
       return mapper.toDto(cartPromotionService.applyCoupon(jwt, req.code()));
-    }catch (Exception e) {
+    } catch (Exception e) {
       throw new EntityNotFoundException("Coupon not found: " + req.code());
     }
   }
@@ -128,7 +123,8 @@ public class CartController {
   public CartDto remove(@AuthenticationPrincipal Jwt jwt) {
     try {
       return mapper.toDto(cartPromotionService.removeCoupon(jwt));
-    }catch (Exception e) {
-    throw new EntityNotFoundException("Coupon not found");}
+    } catch (Exception e) {
+      throw new EntityNotFoundException("Coupon not found");
+    }
   }
 }

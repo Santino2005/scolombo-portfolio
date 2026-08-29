@@ -32,12 +32,11 @@ public class CartService {
   private final PromotionService promotionService;
 
   public CartService(
-          CartRepository cartRepository,
-          CartItemRepository itemRepository,
-          ProductService productRepository,
-          UsersService usersService,
-          PromotionService promotionService
-  ) {
+      CartRepository cartRepository,
+      CartItemRepository itemRepository,
+      ProductService productRepository,
+      UsersService usersService,
+      PromotionService promotionService) {
     this.cartRepository = cartRepository;
     this.itemRepository = itemRepository;
     this.productService = productRepository;
@@ -52,8 +51,9 @@ public class CartService {
   public Cart getOrCreateActiveCart(Jwt jwt) {
     User user = usersService.getUserOrCreate(jwt);
     return cartRepository
-            .findByUserAndStatus(user, CartStatus.ACTIVE)
-            .orElseGet(() -> {
+        .findByUserAndStatus(user, CartStatus.ACTIVE)
+        .orElseGet(
+            () -> {
               Cart cart = new Cart();
               cart.setUser(user);
               cart.setStatus(CartStatus.ACTIVE);
@@ -71,24 +71,29 @@ public class CartService {
 
   public double totalToPay(Cart cart) {
     double sub = subtotal(cart);
-    double discount = cart == null || cart.getDiscountAmount() == null ? 0.0 : cart.getDiscountAmount();
+    double discount =
+        cart == null || cart.getDiscountAmount() == null ? 0.0 : cart.getDiscountAmount();
     return Math.max(0.0, sub + CHECKOUT_FEE - discount);
   }
 
-  public Cart addItem(Jwt jwt, String productSku, Integer quantity, Map<String, String> components) {
+  public Cart addItem(
+      Jwt jwt, String productSku, Integer quantity, Map<String, String> components) {
     Cart cart = getOrCreateActiveCart(jwt);
 
-    if (quantity == null || quantity <= 0) throw new IllegalArgumentException("Quantity must be > 0");
+    if (quantity == null || quantity <= 0)
+      throw new IllegalArgumentException("Quantity must be > 0");
 
     if (components != null && !components.isEmpty()) {
       String caseSku = components.get("CASE");
-      if (caseSku == null || caseSku.isBlank()) throw new IllegalArgumentException("Custom PC requires CASE");
+      if (caseSku == null || caseSku.isBlank())
+        throw new IllegalArgumentException("Custom PC requires CASE");
 
       double totalPrice = 0;
       for (Map.Entry<String, String> entry : components.entrySet()) {
         String sku = entry.getValue();
         Product p = productService.getById(sku);
-        if (p.getStock() < quantity) throw new IllegalArgumentException("Not enough stock for " + p.getName());
+        if (p.getStock() < quantity)
+          throw new IllegalArgumentException("Not enough stock for " + p.getName());
         totalPrice += p.getPrice();
       }
 
@@ -109,7 +114,8 @@ public class CartService {
 
     Product product = productService.getById(productSku);
 
-    CartItem existing = cart.getItems().stream()
+    CartItem existing =
+        cart.getItems().stream()
             .filter(i -> i.getProduct() != null)
             .filter(i -> productSku.equals(i.getProduct().getSkuPrefix()))
             .findFirst()
@@ -117,11 +123,13 @@ public class CartService {
 
     if (existing != null) {
       int newQty = existing.getQuantity() + quantity;
-      if (product.getStock() < newQty) throw new IllegalArgumentException("Not enough stock for " + product.getName());
+      if (product.getStock() < newQty)
+        throw new IllegalArgumentException("Not enough stock for " + product.getName());
       existing.setQuantity(newQty);
       existing.setTotalPrice(product.getPrice() * newQty);
     } else {
-      if (product.getStock() < quantity) throw new IllegalArgumentException("Not enough stock for " + product.getName());
+      if (product.getStock() < quantity)
+        throw new IllegalArgumentException("Not enough stock for " + product.getName());
 
       CartItem item = new CartItem();
       item.setName(product.getName());
@@ -144,7 +152,8 @@ public class CartService {
     User user = usersService.getUserOrCreate(jwt);
     Cart cart = cartRepository.findByUserAndStatus(user, CartStatus.ACTIVE).orElseThrow();
 
-    CartItem item = itemRepository
+    CartItem item =
+        itemRepository
             .findByIdAndCartId(itemId, cart.getId())
             .orElseThrow(() -> new IllegalArgumentException("Item not found"));
 
@@ -158,7 +167,8 @@ public class CartService {
 
     if (item.getProduct() != null) {
       Product p = productService.getById(item.getProduct().getSkuPrefix());
-      if (p.getStock() < quantity) throw new IllegalArgumentException("Not enough stock for " + p.getName());
+      if (p.getStock() < quantity)
+        throw new IllegalArgumentException("Not enough stock for " + p.getName());
       item.setQuantity(quantity);
       item.setTotalPrice(item.getProduct().getPrice() * quantity);
     } else {
@@ -167,12 +177,14 @@ public class CartService {
       }
       for (String sku : item.getComponents().values()) {
         Product p = productService.getById(sku);
-        if (p.getStock() < quantity) throw new IllegalArgumentException("Not enough stock for " + p.getName());
+        if (p.getStock() < quantity)
+          throw new IllegalArgumentException("Not enough stock for " + p.getName());
       }
 
       item.setQuantity(quantity);
       double total = 0;
-      for (String sku : item.getComponents().values()) total += productService.getById(sku).getPrice();
+      for (String sku : item.getComponents().values())
+        total += productService.getById(sku).getPrice();
       item.setTotalPrice(total * quantity);
     }
 
@@ -189,7 +201,8 @@ public class CartService {
     User user = usersService.getUserOrCreate(jwt);
     Cart cart = cartRepository.findByUserAndStatus(user, CartStatus.ACTIVE).orElseThrow();
 
-    CartItem item = itemRepository
+    CartItem item =
+        itemRepository
             .findByIdAndCartId(itemId, cart.getId())
             .orElseThrow(() -> new IllegalArgumentException("Item not found"));
 
@@ -230,21 +243,25 @@ public class CartService {
     return cartRepository.save(cart);
   }
 
-  public CartItem updateComponentInItem(Jwt jwt, UUID itemId, String componentType, String newProductSku) {
+  public CartItem updateComponentInItem(
+      Jwt jwt, UUID itemId, String componentType, String newProductSku) {
     User user = usersService.getUserOrCreate(jwt);
     Cart cart = cartRepository.findByUserAndStatus(user, CartStatus.ACTIVE).orElseThrow();
 
-    CartItem item = itemRepository
+    CartItem item =
+        itemRepository
             .findByIdAndCartId(itemId, cart.getId())
             .orElseThrow(() -> new IllegalArgumentException("Item not found"));
 
     Product newProduct = productService.getById(newProductSku);
-    if (newProduct.getStock() < item.getQuantity()) throw new IllegalArgumentException("Not enough stock");
+    if (newProduct.getStock() < item.getQuantity())
+      throw new IllegalArgumentException("Not enough stock");
 
     item.getComponents().put(componentType, newProductSku);
 
     double totalPrice = 0;
-    for (String sku : item.getComponents().values()) totalPrice += productService.getById(sku).getPrice();
+    for (String sku : item.getComponents().values())
+      totalPrice += productService.getById(sku).getPrice();
     item.setTotalPrice(totalPrice * item.getQuantity());
 
     CartItem saved = itemRepository.save(item);
@@ -257,15 +274,18 @@ public class CartService {
   }
 
   public CartItem replaceComponents(Jwt jwt, UUID itemId, Map<String, String> newComponents) {
-    if (newComponents == null || newComponents.isEmpty()) throw new IllegalArgumentException("components are required");
+    if (newComponents == null || newComponents.isEmpty())
+      throw new IllegalArgumentException("components are required");
 
     String caseSku = newComponents.get("CASE");
-    if (caseSku == null || caseSku.isBlank()) throw new IllegalArgumentException("Custom PC requires CASE");
+    if (caseSku == null || caseSku.isBlank())
+      throw new IllegalArgumentException("Custom PC requires CASE");
 
     User user = usersService.getUserOrCreate(jwt);
     Cart cart = cartRepository.findByUserAndStatus(user, CartStatus.ACTIVE).orElseThrow();
 
-    CartItem item = itemRepository
+    CartItem item =
+        itemRepository
             .findByIdAndCartId(itemId, cart.getId())
             .orElseThrow(() -> new IllegalArgumentException("Item not found"));
 
@@ -274,7 +294,8 @@ public class CartService {
 
     for (String sku : newComponents.values()) {
       Product p = productService.getById(sku);
-      if (p.getStock() < qty) throw new IllegalArgumentException("Not enough stock for " + p.getName());
+      if (p.getStock() < qty)
+        throw new IllegalArgumentException("Not enough stock for " + p.getName());
       total += p.getPrice();
     }
 
@@ -306,7 +327,8 @@ public class CartService {
       return;
     }
 
-    double eligibleSubtotal = cart.getItems().stream()
+    double eligibleSubtotal =
+        cart.getItems().stream()
             .filter(i -> promotionService.appliesToItem(promo, i))
             .mapToDouble(CartItem::getTotalPrice)
             .sum();

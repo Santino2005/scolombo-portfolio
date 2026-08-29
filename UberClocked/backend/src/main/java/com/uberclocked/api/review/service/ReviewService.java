@@ -23,8 +23,8 @@ public class ReviewService {
   private final UsersService usersService;
   private final ProductService productService;
 
-  public ReviewService(ReviewRepository reviewRepository, UsersService usersService,ProductService productService
-      ) {
+  public ReviewService(
+      ReviewRepository reviewRepository, UsersService usersService, ProductService productService) {
     this.reviewRepository = reviewRepository;
     this.usersService = usersService;
     this.productService = productService;
@@ -33,8 +33,7 @@ public class ReviewService {
   public Review createReview(CreateReviewDto dto, Jwt jwt) {
     User user = usersService.getUserOrCreate(jwt);
 
-    Product product =
-            productService.getById(dto.skuPrefix());
+    Product product = productService.getById(dto.skuPrefix());
     if (reviewRepository.existsByUserAndProduct(user, product)) {
       throw new IllegalStateException("Already reviewed this product");
     }
@@ -53,9 +52,7 @@ public class ReviewService {
   }
 
   public List<Review> getByProduct(String productId) {
-    Product product =
-            productService.
-                    getById(productId);
+    Product product = productService.getById(productId);
     return reviewRepository.findByProductOrderByCreatedAtDesc(product);
   }
 
@@ -66,15 +63,12 @@ public class ReviewService {
   }
 
   public double getAvgRating(String productId) {
-    Product product =
-            productService.
-                    getById(productId);
+    Product product = productService.getById(productId);
     return reviewRepository.avgByProduct(product);
   }
+
   public long getCount(String productId) {
-    Product product =
-            productService.
-                    getById(productId);
+    Product product = productService.getById(productId);
     return reviewRepository.countByProduct(product);
   }
 

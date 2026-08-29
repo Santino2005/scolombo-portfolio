@@ -7,7 +7,6 @@ import com.uberclocked.api.market.model.entity.PostStatus;
 import com.uberclocked.api.market.repository.PostRepository;
 import com.uberclocked.api.user.model.entity.User;
 import com.uberclocked.api.user.service.UsersService;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,14 +33,14 @@ public class PostService {
       img = image.getBytes();
     }
     Post post =
-            new Post(
-                    dto.title(),
-                    img,
-                    dto.description(),
-                    dto.price(),
-                    dto.category(),
-                    seller,
-                    LocalDateTime.now());
+        new Post(
+            dto.title(),
+            img,
+            dto.description(),
+            dto.price(),
+            dto.category(),
+            seller,
+            LocalDateTime.now());
 
     post.setStatus(PostStatus.ACTIVE);
     return postRepository.save(post);
@@ -57,8 +56,8 @@ public class PostService {
 
   public Post getById(UUID id) {
     return postRepository
-            .findById(id)
-            .orElseThrow(() -> new ResourceDoesNotExistsException("Post not found"));
+        .findById(id)
+        .orElseThrow(() -> new ResourceDoesNotExistsException("Post not found"));
   }
 
   public List<Post> getMyPosts(Jwt jwt) {

@@ -6,7 +6,6 @@ import com.uberclocked.api.purchase.model.dto.UpdatePurchaseDto;
 import com.uberclocked.api.purchase.service.PurchaseService;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;

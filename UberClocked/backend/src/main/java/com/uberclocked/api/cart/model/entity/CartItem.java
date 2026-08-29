@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,38 +24,29 @@ import org.hibernate.annotations.CreationTimestamp;
 @Getter
 public class CartItem {
 
-  @Id
-  @GeneratedValue
-  private UUID id;
+  @Id @GeneratedValue private UUID id;
 
   public UUID id() {
     return id;
   }
 
-  @Setter
-  private String name;
+  @Setter private String name;
 
   public String name() {
     return name;
   }
 
-  @ManyToOne
-  @Setter
-  private Cart cart;
+  @ManyToOne @Setter private Cart cart;
 
-  @ManyToOne
-  @Setter
-  private Product product;
+  @ManyToOne @Setter private Product product;
 
-  @Setter
-  private Integer quantity;
+  @Setter private Integer quantity;
 
   public Integer quantity() {
     return quantity;
   }
 
-  @Setter
-  private double totalPrice;
+  @Setter private double totalPrice;
 
   public double totalPrice() {
     return totalPrice;

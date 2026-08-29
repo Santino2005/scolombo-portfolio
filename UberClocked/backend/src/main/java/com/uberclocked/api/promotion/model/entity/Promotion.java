@@ -37,7 +37,8 @@ public class Promotion {
   private String description;
 
   @Column(nullable = false)
-  @Min(1) @Max(100)
+  @Min(1)
+  @Max(100)
   private Integer discount;
 
   private LocalDateTime startDate;
@@ -60,6 +61,5 @@ public class Promotion {
   @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<PromotionTarget> targets = new ArrayList<>();
 
-  @Version
-  private Long version;
+  @Version private Long version;
 }

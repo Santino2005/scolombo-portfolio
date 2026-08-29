@@ -1,0 +1,22 @@
+# Environment variables
+.env
+.env.*
+*.env
+*.local
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+
+# Java / Gradle
+.gradle/
+build/
+bin/
+out/
+
+# IDEs and OS
+.idea/
+*.iml
+.vscode/
+.DS_Store

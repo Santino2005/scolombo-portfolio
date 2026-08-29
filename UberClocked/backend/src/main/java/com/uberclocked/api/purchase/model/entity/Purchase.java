@@ -23,9 +23,7 @@ import lombok.Setter;
 @Setter
 public class Purchase {
 
-  @Id
-  @GeneratedValue
-  private UUID id;
+  @Id @GeneratedValue private UUID id;
 
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = true)

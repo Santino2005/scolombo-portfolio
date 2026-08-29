@@ -1,18 +1,14 @@
 package com.uberclocked.api.market.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uberclocked.api.market.model.dto.PostDataDto;
 import com.uberclocked.api.market.model.dto.PostInterestDto;
 import com.uberclocked.api.market.model.dto.PostResponseDto;
 import com.uberclocked.api.market.model.dto.UserPublicDto;
 import com.uberclocked.api.market.service.PostInterestService;
 import com.uberclocked.api.market.service.PostService;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -41,9 +37,10 @@ public class PostController {
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public PostResponseDto create(
-          @RequestPart("data") PostDataDto dto,
-          @RequestPart(value = "image", required = false) MultipartFile image,
-          @AuthenticationPrincipal Jwt jwt) throws IOException {
+      @RequestPart("data") PostDataDto dto,
+      @RequestPart(value = "image", required = false) MultipartFile image,
+      @AuthenticationPrincipal Jwt jwt)
+      throws IOException {
     return PostResponseDto.fromEntity(postService.create(dto, image, jwt));
   }
 
@@ -64,7 +61,7 @@ public class PostController {
 
   @PatchMapping("/{id}")
   public PostResponseDto update(
-          @PathVariable UUID id, @RequestBody PostDataDto dto, @AuthenticationPrincipal Jwt jwt) {
+      @PathVariable UUID id, @RequestBody PostDataDto dto, @AuthenticationPrincipal Jwt jwt) {
     return PostResponseDto.fromEntity(postService.update(id, dto, jwt));
   }
 
@@ -84,25 +81,29 @@ public class PostController {
   }
 
   @GetMapping("/{id}/interested")
-  public List<PostInterestDto> getInterested(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
+  public List<PostInterestDto> getInterested(
+      @PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
     return interestService.getInterestedUsers(id, jwt);
   }
 
   @PostMapping("/{postId}/interested/{interestedUserId}/purchase")
   public UserPublicDto purchaseInterestedInfo(
-          @PathVariable UUID postId,
-          @PathVariable UUID interestedUserId,
-          @AuthenticationPrincipal Jwt jwt) {
-    return UserPublicDto.fromEntity(interestService.buyInterestedInfo(postId, interestedUserId, jwt));
+      @PathVariable UUID postId,
+      @PathVariable UUID interestedUserId,
+      @AuthenticationPrincipal Jwt jwt) {
+    return UserPublicDto.fromEntity(
+        interestService.buyInterestedInfo(postId, interestedUserId, jwt));
   }
 
   @GetMapping("/{postId}/interested/{interestedUserId}")
   public UserPublicDto getInterestedInfo(
-          @PathVariable UUID postId,
-          @PathVariable UUID interestedUserId,
-          @AuthenticationPrincipal Jwt jwt) {
-    return UserPublicDto.fromEntity(interestService.getInterestedInfoIfPurchased(postId, interestedUserId, jwt));
+      @PathVariable UUID postId,
+      @PathVariable UUID interestedUserId,
+      @AuthenticationPrincipal Jwt jwt) {
+    return UserPublicDto.fromEntity(
+        interestService.getInterestedInfoIfPurchased(postId, interestedUserId, jwt));
   }
+
   @GetMapping("/{id}/interest/me")
   public boolean hasMyInterest(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
     return interestService.hasInterest(id, jwt);

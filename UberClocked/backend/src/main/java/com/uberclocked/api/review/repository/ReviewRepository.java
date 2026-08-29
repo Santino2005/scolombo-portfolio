@@ -3,7 +3,6 @@ package com.uberclocked.api.review.repository;
 import com.uberclocked.api.product.model.entity.Product;
 import com.uberclocked.api.review.model.entity.Review;
 import com.uberclocked.api.user.model.entity.User;
-
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

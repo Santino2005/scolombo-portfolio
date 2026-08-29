@@ -11,7 +11,6 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.MapJoin;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +62,7 @@ public class ProductService {
             () -> new ResourceDoesNotExistsException("Product with SKU '" + sku + "' not found"));
   }
 
-  public Product update(String sku, ProductDataDto dto,MultipartFile image) throws IOException {
+  public Product update(String sku, ProductDataDto dto, MultipartFile image) throws IOException {
     Product product = getById(sku);
     productMapper.update(dto, product);
     if (dto.componentSkuPrefix() != null) {
@@ -86,38 +85,37 @@ public class ProductService {
   }
 
   public List<Product> filter(
-          String componentSkuPrefix,
-          Double minPrice,
-          Double maxPrice,
-          Map<String, String> attributes) {
+      String componentSkuPrefix, Double minPrice, Double maxPrice, Map<String, String> attributes) {
 
-    Specification<Product> spec = (root, query, cb) -> {
-      List<Predicate> predicates = new ArrayList<>();
+    Specification<Product> spec =
+        (root, query, cb) -> {
+          List<Predicate> predicates = new ArrayList<>();
 
-      if (componentSkuPrefix != null && !componentSkuPrefix.isEmpty()) {
-        predicates.add(cb.like(root.get("skuPrefix"), componentSkuPrefix + "%"));
-      }
+          if (componentSkuPrefix != null && !componentSkuPrefix.isEmpty()) {
+            predicates.add(cb.like(root.get("skuPrefix"), componentSkuPrefix + "%"));
+          }
 
-      if (minPrice != null) {
-        predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
-      }
+          if (minPrice != null) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
+          }
 
-      if (maxPrice != null) {
-        predicates.add(cb.lessThanOrEqualTo(root.get("price"), maxPrice));
-      }
+          if (maxPrice != null) {
+            predicates.add(cb.lessThanOrEqualTo(root.get("price"), maxPrice));
+          }
 
-      attributes.forEach((key, value) -> {
-        if (value != null && !value.isEmpty()) {
-          MapJoin<Product, String, String> join = root.joinMap("attributes", JoinType.LEFT);
-          predicates.add(cb.and(
-                  cb.equal(cb.lower(join.key()), key.toLowerCase()),
-                  cb.equal(cb.lower(join.value()), value.toLowerCase())
-          ));
-        }
-      });
+          attributes.forEach(
+              (key, value) -> {
+                if (value != null && !value.isEmpty()) {
+                  MapJoin<Product, String, String> join = root.joinMap("attributes", JoinType.LEFT);
+                  predicates.add(
+                      cb.and(
+                          cb.equal(cb.lower(join.key()), key.toLowerCase()),
+                          cb.equal(cb.lower(join.value()), value.toLowerCase())));
+                }
+              });
 
-      return cb.and(predicates.toArray(new Predicate[0]));
-    };
+          return cb.and(predicates.toArray(new Predicate[0]));
+        };
 
     return productRepository.findAll(spec);
   }

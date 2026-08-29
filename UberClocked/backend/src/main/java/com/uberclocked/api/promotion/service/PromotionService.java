@@ -8,12 +8,11 @@ import com.uberclocked.api.promotion.model.entity.PromotionTarget;
 import com.uberclocked.api.promotion.repository.PromotionRepository;
 import com.uberclocked.api.user.model.entity.User;
 import com.uberclocked.api.user.service.UsersService;
+import com.uberclocked.api.wheel.model.dto.WheelDto;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
-import com.uberclocked.api.wheel.model.dto.WheelDto;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +22,10 @@ public class PromotionService {
   private final UsersService userService;
   private final PromotionRepository promotionRepository;
 
-  public PromotionService(CompanyUserService companyUserService, UsersService userService, PromotionRepository promotionRepository) {
+  public PromotionService(
+      CompanyUserService companyUserService,
+      UsersService userService,
+      PromotionRepository promotionRepository) {
     this.companyUserService = companyUserService;
     this.userService = userService;
     this.promotionRepository = promotionRepository;
@@ -56,18 +58,20 @@ public class PromotionService {
     }
   }
 
-  public List<Promotion> getApplicablePromotions(UUID userId, Cart cart, List<Promotion> allPromos) {
-    return allPromos.stream()
-            .filter(promo -> canApplyPromotion(userId, promo, cart))
-            .toList();
+  public List<Promotion> getApplicablePromotions(
+      UUID userId, Cart cart, List<Promotion> allPromos) {
+    return allPromos.stream().filter(promo -> canApplyPromotion(userId, promo, cart)).toList();
   }
+
   public void applyPromotion(UUID userId, Promotion promo, Cart cart) {
     assertCanApply(userId, promo, cart);
   }
 
   @Transactional
   public void consumePromotion(UUID promotionId) {
-    Promotion promo = promotionRepository.findById(promotionId)
+    Promotion promo =
+        promotionRepository
+            .findById(promotionId)
             .orElseThrow(() -> new IllegalStateException("Promotion not found: " + promotionId));
 
     if (!promo.isActive()) throw new IllegalStateException("Promotion not active");
@@ -95,8 +99,8 @@ public class PromotionService {
     return switch (t.getKind()) {
       case PRODUCT_SKU -> {
         yield item.getProduct() != null
-                && t.getSku() != null
-                && t.getSku().equalsIgnoreCase(item.getProduct().getSkuPrefix());
+            && t.getSku() != null
+            && t.getSku().equalsIgnoreCase(item.getProduct().getSkuPrefix());
       }
       case COMPONENT_TYPE -> {
         if (t.getComponentType() == null) yield false;
@@ -106,30 +110,29 @@ public class PromotionService {
       case COMPONENT_SKU -> {
         if (t.getSku() == null) yield false;
         var comps = item.getComponents();
-        yield comps != null && comps.values().stream().anyMatch(v -> v.equalsIgnoreCase(t.getSku()));
+        yield comps != null
+            && comps.values().stream().anyMatch(v -> v.equalsIgnoreCase(t.getSku()));
       }
     };
   }
 
   private boolean matchesAny(List<PromotionTarget> targets, Cart cart) {
-    if (targets == null || targets.isEmpty() || cart == null || cart.getItems() == null) return false;
+    if (targets == null || targets.isEmpty() || cart == null || cart.getItems() == null)
+      return false;
 
-    return cart.getItems().stream().anyMatch(item ->
-            targets.stream().anyMatch(t -> matchesTarget(t, item))
-    );
+    return cart.getItems().stream()
+        .anyMatch(item -> targets.stream().anyMatch(t -> matchesTarget(t, item)));
   }
 
   public boolean appliesToItem(Promotion promo, CartItem item) {
     var targets = promo.getTargets();
     if (targets == null || targets.isEmpty()) return true;
 
-    var includes = targets.stream()
-            .filter(t -> t.getMode() == PromotionTarget.TargetMode.INCLUDE)
-            .toList();
+    var includes =
+        targets.stream().filter(t -> t.getMode() == PromotionTarget.TargetMode.INCLUDE).toList();
 
-    var excludes = targets.stream()
-            .filter(t -> t.getMode() == PromotionTarget.TargetMode.EXCLUDE)
-            .toList();
+    var excludes =
+        targets.stream().filter(t -> t.getMode() == PromotionTarget.TargetMode.EXCLUDE).toList();
 
     boolean excluded = excludes.stream().anyMatch(t -> matchesTarget(t, item));
     if (excluded) return false;
@@ -145,13 +148,11 @@ public class PromotionService {
     var targets = promo.getTargets();
     if (targets == null || targets.isEmpty()) return true;
 
-    var includes = targets.stream()
-            .filter(t -> t.getMode() == PromotionTarget.TargetMode.INCLUDE)
-            .toList();
+    var includes =
+        targets.stream().filter(t -> t.getMode() == PromotionTarget.TargetMode.INCLUDE).toList();
 
-    var excludes = targets.stream()
-            .filter(t -> t.getMode() == PromotionTarget.TargetMode.EXCLUDE)
-            .toList();
+    var excludes =
+        targets.stream().filter(t -> t.getMode() == PromotionTarget.TargetMode.EXCLUDE).toList();
 
     if (!excludes.isEmpty() && matchesAny(excludes, cart)) return false;
     if (!includes.isEmpty()) return matchesAny(includes, cart);
@@ -161,13 +162,9 @@ public class PromotionService {
 
   @Transactional
   public WheelDto.PromotionDto createWheelPromotion(
-          String userId,
-          String prizeLabel,
-          int discount,
-          List<WheelDto.PromotionTargetBody> targets
-  ) {
-    String code = "WHEEL-" + UUID.randomUUID().toString().replace("-", "")
-            .substring(0, 8).toUpperCase();
+      String userId, String prizeLabel, int discount, List<WheelDto.PromotionTargetBody> targets) {
+    String code =
+        "WHEEL-" + UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
 
     Promotion p = new Promotion();
     p.setCode(code);

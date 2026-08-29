@@ -21,9 +21,8 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        name = "reviews",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "product_id"})}
-)
+    name = "reviews",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "product_id"})})
 @Getter
 public class Review {
 

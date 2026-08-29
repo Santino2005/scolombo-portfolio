@@ -8,5 +8,4 @@ public record MpBrickSubmitDto(
     String paymentMethodId,
     String issuerId,
     Integer installments,
-    PayerDto payer) {
-}
+    PayerDto payer) {}

@@ -8,5 +8,4 @@ public record ProductDataDto(
     String componentSkuPrefix,
     Double price,
     int stock,
-    Map<String, String> attributes) {
-}
+    Map<String, String> attributes) {}

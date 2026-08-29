@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,23 +23,17 @@ import lombok.Setter;
 @Table(name = "cart")
 @Getter
 public class Cart {
-  @Id
-  @GeneratedValue
-  private UUID id;
+  @Id @GeneratedValue private UUID id;
 
-  @ManyToOne
-  @Setter
-  private User user;
+  @ManyToOne @Setter private User user;
 
   @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
   @Setter
   @OrderBy("createdAt ASC")
   private List<CartItem> items = new ArrayList<>();
 
-  @Setter
-  private LocalDateTime createdAt;
-  @Setter
-  private LocalDateTime updatedAt;
+  @Setter private LocalDateTime createdAt;
+  @Setter private LocalDateTime updatedAt;
 
   @Enumerated(EnumType.STRING)
   @Setter
@@ -50,10 +43,7 @@ public class Cart {
     return new ArrayList<>(items);
   }
 
-  @ManyToOne
-  @Setter
-  private Promotion appliedPromotion;
+  @ManyToOne @Setter private Promotion appliedPromotion;
 
-  @Setter
-  private Double discountAmount;
+  @Setter private Double discountAmount;
 }

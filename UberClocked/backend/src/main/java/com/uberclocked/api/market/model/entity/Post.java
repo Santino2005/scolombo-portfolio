@@ -22,11 +22,9 @@ public class Post {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @Setter
-  private String title;
+  @Setter private String title;
 
-  @Setter
-  private byte[] image;
+  @Setter private byte[] image;
 
   @Column(length = 2000)
   @Setter

@@ -1,0 +1,30 @@
+name: Keep Render Backend Alive
+
+on:
+  schedule:
+    # Se ejecuta cada 10 minutos para evitar que Render entre en reposo (15 min)
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send keep-alive ping to Render Backend
+        run: |
+          BACKEND_URL="${{ secrets.RENDER_BACKEND_URL }}"
+          if [ -z "$BACKEND_URL" ]; then
+            echo "RENDER_BACKEND_URL secret not set. Skipping ping."
+            echo "Please configure RENDER_BACKEND_URL in GitHub Repo Settings -> Secrets -> Actions"
+            exit 0
+          fi
+
+          echo "Pinging $BACKEND_URL/health ..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BACKEND_URL/health")
+          echo "Response HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "Backend is alive and healthy!"
+          else
+            echo "Warning: Received HTTP $HTTP_STATUS"
+          fi

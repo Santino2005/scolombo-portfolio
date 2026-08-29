@@ -26,11 +26,10 @@ public class PurchaseService {
   private final EmailService emailService;
 
   public PurchaseService(
-          PurchaseRepository purchaseRepository,
-          CartService cartService,
-          UsersService usersService,
-          EmailService emailService
-  ) {
+      PurchaseRepository purchaseRepository,
+      CartService cartService,
+      UsersService usersService,
+      EmailService emailService) {
     this.purchaseRepository = purchaseRepository;
     this.cartService = cartService;
     this.usersService = usersService;
@@ -74,7 +73,8 @@ public class PurchaseService {
 
   @Transactional
   public Purchase updatePurchase(UUID id, UpdatePurchaseDto dto, Jwt jwt) {
-    Purchase purchase = purchaseRepository
+    Purchase purchase =
+        purchaseRepository
             .findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Purchase not found"));
 
@@ -110,18 +110,15 @@ public class PurchaseService {
         body.append("Scheduled pickup date: ").append(saved.getPickupDate()).append("\n");
       }
 
-      emailService.sendMail(
-              saved.getUser().getEmail(),
-              "Purchase update",
-              body.toString()
-      );
+      emailService.sendMail(saved.getUser().getEmail(), "Purchase update", body.toString());
     }
 
     return saved;
   }
 
   public void deletePurchase(UUID id, Jwt jwt) {
-    Purchase purchase = purchaseRepository
+    Purchase purchase =
+        purchaseRepository
             .findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Purchase not found"));
 

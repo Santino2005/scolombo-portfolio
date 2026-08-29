@@ -44,7 +44,7 @@ public class User {
 
   @Setter private String cellPhone;
 
-  @OneToMany(mappedBy="user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   private List<Cart> carts;
 
   @Setter

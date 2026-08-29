@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uberclocked.api.product.model.dto.ProductDataDto;
 import com.uberclocked.api.product.model.entity.Product;
 import com.uberclocked.api.product.service.ProductService;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -34,7 +32,7 @@ public class ProductController {
     this.productService = productService;
   }
 
-  @PostMapping(consumes = { "multipart/form-data" })
+  @PostMapping(consumes = {"multipart/form-data"})
   @PreAuthorize("hasRole('Admin')")
   public Product create(
       @AuthenticationPrincipal Jwt jwt,
@@ -44,16 +42,12 @@ public class ProductController {
       @RequestParam Double price,
       @RequestParam int stock,
       @RequestParam String attributes,
-      @RequestPart(required = false) MultipartFile image) throws IOException {
+      @RequestPart(required = false) MultipartFile image)
+      throws IOException {
     Map<String, String> attributesMap = new ObjectMapper().readValue(attributes, Map.class);
 
-    ProductDataDto dto = new ProductDataDto(
-        sku,
-        name,
-        componentSkuPrefix,
-        price,
-        stock,
-        attributesMap);
+    ProductDataDto dto =
+        new ProductDataDto(sku, name, componentSkuPrefix, price, stock, attributesMap);
 
     return productService.create(dto, image);
   }
@@ -68,7 +62,9 @@ public class ProductController {
     return productService.getById(sku);
   }
 
-  @PatchMapping(value = "/{sku}", consumes = { "multipart/form-data" })
+  @PatchMapping(
+      value = "/{sku}",
+      consumes = {"multipart/form-data"})
   @PreAuthorize("hasRole('Admin')")
   public Product update(
       @AuthenticationPrincipal Jwt jwt,
@@ -78,17 +74,13 @@ public class ProductController {
       @RequestParam int stock,
       @RequestParam String componentSkuPrefix,
       @RequestParam String attributes,
-      @RequestPart(required = false) MultipartFile image) throws IOException {
+      @RequestPart(required = false) MultipartFile image)
+      throws IOException {
 
     Map<String, String> attributesMap = new ObjectMapper().readValue(attributes, Map.class);
 
-    ProductDataDto dto = new ProductDataDto(
-        sku,
-        name,
-        componentSkuPrefix,
-        price,
-        stock,
-        attributesMap);
+    ProductDataDto dto =
+        new ProductDataDto(sku, name, componentSkuPrefix, price, stock, attributesMap);
 
     return productService.update(sku, dto, image);
   }
@@ -110,17 +102,11 @@ public class ProductController {
       componentSkuPrefix = null;
     }
 
-    Set<String> reservedKeys = Set.of(
-        "componentSkuPrefix",
-        "minPrice",
-        "maxPrice",
-        "page",
-        "size",
-        "sort");
+    Set<String> reservedKeys =
+        Set.of("componentSkuPrefix", "minPrice", "maxPrice", "page", "size", "sort");
 
     attributes.keySet().removeIf(reservedKeys::contains);
 
     return productService.filter(componentSkuPrefix, minPrice, maxPrice, attributes);
   }
-
 }

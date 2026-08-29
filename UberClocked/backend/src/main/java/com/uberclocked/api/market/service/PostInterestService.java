@@ -69,18 +69,18 @@ public class PostInterestService {
     User interested = usersService.getUSerById(interestedUserId);
 
     PostInterest interest =
-            interestRepository
-                    .findByPostAndInterested(post, interested)
-                    .orElseThrow(() -> new IllegalStateException("This user is not interested in this post"));
+        interestRepository
+            .findByPostAndInterested(post, interested)
+            .orElseThrow(
+                () -> new IllegalStateException("This user is not interested in this post"));
 
     if (!interest.isInfoPurchased()) {
       interest.setInfoPurchased(true);
       interestRepository.save(interest);
       emailService.sendMail(
-              seller.getEmail(),
-              "Information of the interested - UberClocked",
-              buildInterestedBody(post, interested)
-      );
+          seller.getEmail(),
+          "Information of the interested - UberClocked",
+          buildInterestedBody(post, interested));
     }
     return interested;
   }
@@ -96,9 +96,10 @@ public class PostInterestService {
     User interested = usersService.getUSerById(interestedUserId);
 
     PostInterest interest =
-            interestRepository
-                    .findByPostAndInterested(post, interested)
-                    .orElseThrow(() -> new IllegalStateException("This user is not interested in this post"));
+        interestRepository
+            .findByPostAndInterested(post, interested)
+            .orElseThrow(
+                () -> new IllegalStateException("This user is not interested in this post"));
 
     if (!interest.isInfoPurchased()) {
       throw new IllegalStateException("Info not purchased yet");
@@ -118,7 +119,6 @@ public class PostInterestService {
     return interestRepository.existsByPostAndInterested(post, user);
   }
 
-
   private String buildInterestedBody(Post post, User interested) {
     return """
     You have successfully purchased the contact information of an interested user for your post:
@@ -134,12 +134,12 @@ public class PostInterestService {
     You can now contact this user directly.
 
     Thank you for using UberClocked.
-   """.formatted(
+   """
+        .formatted(
             post.getTitle(),
             interested.getUserName(),
             interested.getEmail(),
             interested.getCellPhone(),
-            interested.getCountry()
-    );
+            interested.getCountry());
   }
 }

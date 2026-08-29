@@ -7,10 +7,9 @@ import com.uberclocked.api.review.model.dto.ProductRatingDto;
 import com.uberclocked.api.review.model.dto.ReviewResponseDto;
 import com.uberclocked.api.review.model.entity.Review;
 import com.uberclocked.api.review.service.ReviewService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,7 +41,8 @@ public class ReviewsController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ReviewResponseDto create(@Valid @RequestBody CreateReviewDto dto, @AuthenticationPrincipal Jwt jwt) {
+  public ReviewResponseDto create(
+      @Valid @RequestBody CreateReviewDto dto, @AuthenticationPrincipal Jwt jwt) {
     return reviewMapper.toDto(reviewService.createReview(dto, jwt));
   }
 
@@ -69,7 +69,10 @@ public class ReviewsController {
   }
 
   @PatchMapping("/{id}")
-  public ReviewResponseDto update(@PathVariable UUID id, @RequestBody ModifyReviewDataDto dto, @AuthenticationPrincipal Jwt jwt) {
+  public ReviewResponseDto update(
+      @PathVariable UUID id,
+      @RequestBody ModifyReviewDataDto dto,
+      @AuthenticationPrincipal Jwt jwt) {
     return reviewMapper.toDto(reviewService.update(id, dto, jwt));
   }
 
@@ -81,10 +84,9 @@ public class ReviewsController {
 
   @GetMapping
   @PreAuthorize("hasRole('Admin')")
-  public List<ReviewResponseDto> allReviews(
-          @RequestParam(required = false) String skuPrefix
-  ) {
-    List<Review> list = (skuPrefix == null || skuPrefix.isBlank())
+  public List<ReviewResponseDto> allReviews(@RequestParam(required = false) String skuPrefix) {
+    List<Review> list =
+        (skuPrefix == null || skuPrefix.isBlank())
             ? reviewService.getAllReviews()
             : reviewService.getByProduct(skuPrefix);
 

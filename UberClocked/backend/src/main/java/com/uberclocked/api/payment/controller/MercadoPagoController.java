@@ -2,6 +2,10 @@ package com.uberclocked.api.payment.controller;
 
 import com.uberclocked.api.payment.model.dto.InterestedInfoPaymentDto;
 import com.uberclocked.api.payment.model.dto.InterestedInfoPreferenceRequest;
+import com.uberclocked.api.payment.model.dto.MpBrickSubmitDto;
+import com.uberclocked.api.payment.model.dto.PaymentDto;
+import com.uberclocked.api.payment.model.dto.PreferenceDto;
+import com.uberclocked.api.payment.service.MercadoPagoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,12 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.uberclocked.api.payment.model.dto.MpBrickSubmitDto;
-import com.uberclocked.api.payment.model.dto.PaymentDto;
-import com.uberclocked.api.payment.model.dto.PreferenceDto;
-import com.uberclocked.api.payment.service.MercadoPagoService;
-
 
 @RestController
 @RequestMapping("/mp")
@@ -40,8 +38,7 @@ public class MercadoPagoController {
 
   @PostMapping("/payment")
   public PaymentDto createPayment(
-          @AuthenticationPrincipal Jwt jwt,
-          @RequestBody MpBrickSubmitDto body) {
+      @AuthenticationPrincipal Jwt jwt, @RequestBody MpBrickSubmitDto body) {
 
     log.info("Creating MercadoPago payment for user: {}", jwt.getSubject());
     log.debug("Payment request payload: {}", body);
@@ -54,8 +51,7 @@ public class MercadoPagoController {
 
   @PostMapping("/payment/interested-info")
   public PaymentDto createInterestedInfoPayment(
-          @AuthenticationPrincipal Jwt jwt,
-          @RequestBody InterestedInfoPaymentDto body) {
+      @AuthenticationPrincipal Jwt jwt, @RequestBody InterestedInfoPaymentDto body) {
 
     log.info("Creating InterestedInfo payment for user: {}", jwt.getSubject());
 
@@ -67,8 +63,7 @@ public class MercadoPagoController {
 
   @PostMapping("/preference/interested-info")
   public PreferenceDto createInterestedInfoPreference(
-          @AuthenticationPrincipal Jwt jwt,
-          @RequestBody InterestedInfoPreferenceRequest body) {
+      @AuthenticationPrincipal Jwt jwt, @RequestBody InterestedInfoPreferenceRequest body) {
 
     log.info("Creating InterestedInfo preference for user: {}", jwt.getSubject());
 

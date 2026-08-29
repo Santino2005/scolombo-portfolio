@@ -38,25 +38,28 @@ public class SecurityConfig {
     http.cors(withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
-            auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**")
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, "/posts")
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, "/posts/{id}")
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, "/reviews/**")
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, "/posts/*")
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, "/products/**")
-                .permitAll()
-                .requestMatchers("/products/**")
-                .authenticated()
-                .anyRequest()
-                .authenticated())
+            auth ->
+                auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/health")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/posts")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/posts/{id}")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/reviews/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/posts/*")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/products/**")
+                    .permitAll()
+                    .requestMatchers("/products/**")
+                    .authenticated()
+                    .anyRequest()
+                    .authenticated())
         .oauth2ResourceServer(
-            oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+            oauth2 ->
+                oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
     return http.build();
   }
 
@@ -64,8 +67,12 @@ public class SecurityConfig {
   public CorsConfigurationSource corsConfigurationSource() {
 
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(
-        Arrays.asList("http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"));
+    configuration.setAllowedOriginPatterns(
+        Arrays.asList(
+            "http://localhost:*",
+            "http://127.0.0.1:*",
+            "https://*.vercel.app",
+            "https://*.onrender.com"));
 
     configuration.setAllowedMethods(
         Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
@@ -81,14 +88,15 @@ public class SecurityConfig {
 
   @Bean
   public JwtDecoder jwtDecoder() {
-    NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(
-        issuerUri + ".well-known/jwks.json").build();
+    NimbusJwtDecoder jwtDecoder =
+        NimbusJwtDecoder.withJwkSetUri(issuerUri + ".well-known/jwks.json").build();
 
     OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
 
     OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
 
-    OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+    OAuth2TokenValidator<Jwt> validator =
+        new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
     jwtDecoder.setJwtValidator(validator);
     return jwtDecoder;

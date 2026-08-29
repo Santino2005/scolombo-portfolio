@@ -29,7 +29,8 @@ public class UsersService {
       UsersRepository usersRepository,
       CompanyService companyService,
       CompanyUserService companyUserService,
-      UserMapper mapper, CartRepository cartRepository) {
+      UserMapper mapper,
+      CartRepository cartRepository) {
     this.usersRepository = usersRepository;
     this.companyService = companyService;
     this.companyUserService = companyUserService;
@@ -56,6 +57,7 @@ public class UsersService {
 
     return newUser;
   }
+
   public User getUserOrCreate(Jwt jwt) {
     String userId = jwt.getSubject();
     User user = usersRepository.findByAuth0Id(userId).orElse(null);
@@ -77,8 +79,9 @@ public class UsersService {
   }
 
   public User getUSerById(String auth0Id) {
-    return usersRepository.findByAuth0Id(auth0Id)
-            .orElseThrow(() -> new IllegalStateException("User not found for auth0Id: " + auth0Id));
+    return usersRepository
+        .findByAuth0Id(auth0Id)
+        .orElseThrow(() -> new IllegalStateException("User not found for auth0Id: " + auth0Id));
   }
 
   public User updateData(Jwt jwt, UserDataDto dataDto) {
@@ -94,7 +97,9 @@ public class UsersService {
   @Transactional
   public void delete(Jwt jwt) {
     String auth0Id = jwt.getSubject();
-    User user = usersRepository.findByAuth0Id(auth0Id)
+    User user =
+        usersRepository
+            .findByAuth0Id(auth0Id)
             .orElseThrow(() -> new ResourceDoesNotExistsException("User does not exist."));
     usersRepository.delete(user);
   }
