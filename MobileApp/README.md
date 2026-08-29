@@ -1,96 +1,47 @@
-# ZeroDebt
+# 💸 ZeroDebt – Smart Group Expense Splitting & Debt Assistant
 
-ZeroDebt is an Android application designed to help users manage and split shared expenses in a simple and transparent way. Whether it's a trip, a shared apartment, or a group event, ZeroDebt keeps track of who paid for what and calculates how much each participant owes, making debt management effortless.
+> **Get the Android App:** 📲 [**Download zeroDebt-SC.apk**](./zeroDebt-SC.apk)
 
-## Features
+---
 
-- **Expense Tracking**
-  - Record shared expenses with descriptions, amounts, dates, and the person who paid.
-  - Categorize expenses for better organization.
+## 🎯 What is ZeroDebt?
 
-- **Group Management**
-  - Create and manage groups for trips, roommates, events, or any shared activity.
-  - Add or remove participants from groups.
+**ZeroDebt** is an intuitive mobile personal finance and social expense organizer designed to take the friction, awkwardness, and confusion out of shared spending.
 
-- **Debt Calculation**
-  - Automatically calculate balances between participants.
-  - Display who owes money, who should receive money, and the exact amount.
+When groups of friends, roommates, or couples share costs, tracking who paid for what and figuring out who owes whom often turns into a messy web of receipts, spreadsheets, and awkward reminders. **ZeroDebt eliminates that stress completely**, providing a clean, transparent, and automated single source of truth for group finances.
 
-- **Settlement Tracking**
-  - Mark debts as settled.
-  - Keep a history of completed payments.
+---
 
-- **User-Friendly Interface**
-  - Clean and intuitive interface built with modern Android development practices.
-  - Responsive layouts following Material Design principles.
+## 🌟 Where ZeroDebt Shines
 
-## Technologies
+- ✈️ **Group Trips & Vacations:** From road trips and flight bookings to shared Airbnb rentals and group dinners, log expenses on the go and let the app handle the math.
+- 🏠 **Roommate & Apartment Living:** Split rent, electricity, Wi-Fi, groceries, and household essentials fairly without endless payment debates.
+- 🎉 **Events & Gatherings:** Organize birthday parties, barbecues, and celebrations where different people buy drinks, food, or decorations.
+- 💑 **Couples & Shared Budgets:** Maintain an effortless and transparent balance of shared dates, home items, and recurring activities.
 
-The application is being developed using modern Android technologies:
+---
 
-- **Kotlin**
-- **Jetpack Compose**
-- **Material Design 3**
-- **MVVM Architecture**
-- **Navigation Compose**
-- **ViewModel**
-- **State Management**
-- **Firebase Authentication** *(planned)*
-- **Cloud Firestore** *(planned)*
+## ✨ Key Value & Experience
 
-## Architecture
+- **Frictionless Balance Calculation:** Instantly calculates net balances and optimizes debt settlements, reducing complex multi-person transfers into the minimum number of payments.
+- **Transparent Expense History:** Every group member can see exactly what was spent, when, why, and by whom.
+- **Settlement Peace of Mind:** Mark debts as settled with one tap and keep a clear record of completed repayments.
+- **Modern & Delightful UI:** Fluid, distraction-free interface built to make managing money feel effortless and visually satisfying.
 
-ZeroDebt follows the **MVVM (Model–View–ViewModel)** architecture to ensure a clean separation of concerns, making the application scalable, maintainable, and easy to test.
+---
 
-```
-Presentation
-    │
-    ▼
-ViewModel
-    │
-    ▼
-Repository
-    │
-    ▼
-Data Sources
-(Local / Remote)
-```
+## 🛠️ Detalle Técnico (Technical Overview)
 
-## Current Status
+- **Platform & Language:** Native Android with **Kotlin**
+- **UI Framework:** Declarative UI with **Jetpack Compose** & **Material Design 3**
+- **Architecture:** **MVVM (Model–View–ViewModel)** with unidirectional data flow and repository pattern for testability and modularity
+- **State & Concurrency:** Kotlin **Coroutines**, **StateFlow**, and **Navigation Compose**
+- **Data & Cloud Roadmap:** Local persistence layer with planned cloud synchronization via **Firebase Authentication** and **Cloud Firestore**
 
-**Work in Progress**
+---
 
-The project is currently under active development. Core features such as expense management, debt calculation, and user authentication are being implemented incrementally.
+## 👤 Author
 
-## Goals
-
-The objective of ZeroDebt is to provide a simple yet powerful solution for people who frequently share expenses, eliminating manual calculations and reducing misunderstandings about payments.
-
-Future improvements include:
-
-- User authentication
-- Cloud synchronization
-- Multiple currencies
-- Expense statistics and charts
-- Notifications and reminders
-- Offline support
-- Dark mode customization
-
-## Learning Objectives
-
-This project also serves as a way to deepen my knowledge of:
-
-- Android development with Kotlin
-- Jetpack Compose
-- Clean Architecture
-- MVVM
-- Firebase services
-- Mobile application architecture
-- Software engineering best practices
-
-## Author
-
-**Santino Colombo**
-
-Computer Engineering Student (4th Year)  
-Full-Stack Developer
+**Santino Colombo**  
+*Full-Stack Developer | Computer Engineering Student (4th Year)*  
+[GitHub Profile](https://github.com/Santino2005) · [Portfolio](https://scolombo-portfolio3.vercel.app/)

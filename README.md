@@ -31,7 +31,15 @@ I primarily work with **TypeScript, JavaScript, Python, Java, and Kotlin**, and 
 
 ---
 
-## Client Projects
+## Featured Projects
+
+### UberClocked – High-Performance PC Building & Hardware E-Commerce
+- **Live Demo / Web:** [https://uberclocked.vercel.app](https://uberclocked.vercel.app)
+- **Repository Path:** [UberClocked/](file:///home/elchurro274/Faculty/PortFolio/scolombo-portfolio/UberClocked)
+
+UberClocked is a full-featured e-commerce and interactive PC building platform designed for hardware enthusiasts and gamers. It allows users to build custom PCs with real-time component compatibility verification, explore a dynamic catalog with live filtering, participate in a community hardware marketplace, spin a discount wheel, and complete purchases with Mercado Pago integration.
+
+---
 
 ### Bravito – Full-Stack Developer & Product Owner
 
@@ -47,29 +55,21 @@ Bravito is a web platform designed for psychologists, educational professionals,
 - Built user interfaces using **React**, **Next.js**, **TypeScript**, and **Tailwind CSS**.
 - Designed and implemented the **PostgreSQL** database schema.
 - Integrated **Firebase Authentication**, **Flyway**, and **Docker** into the development workflow.
-  
-## Software Engineering Practices
-
-I focus on **software quality and maintainability**, applying:
-
-- Design patterns  
-- Testing strategies  
-- Documentation best practices  
-- **Learning Test-Driven Development (TDD) through Kent Beck’s paper**
-
-These practices ensure systems remain reliable, scalable, and maintainable.
 
 ---
 
 ## Mobile Development
 
-### ZeroDebt – Android Expense Sharing App
+### ZeroDebt – Smart Expense Splitting & Group Debt Assistant
 - **Repository Path:** [MobileApp/](file:///home/elchurro274/Faculty/PortFolio/scolombo-portfolio/MobileApp)
 - **APK Download:** [zeroDebt-SC.apk](file:///home/elchurro274/Faculty/PortFolio/scolombo-portfolio/MobileApp/zeroDebt-SC.apk)
-- **Technologies:** Kotlin, Jetpack Compose, Material Design 3, MVVM Architecture
 
-An Android application designed to help users manage and split shared expenses in a simple and transparent way. Keeps track of who paid for what and calculates how much each participant owes, making debt management effortless.
-- Features: Expense tracking, Group management, Debt calculation, Settlement tracking.
+ZeroDebt is a mobile personal finance and social expense organizer that takes the friction, awkwardness, and confusion out of shared spending. Designed for trips with friends, shared apartments, group dinners, and couple budgets, ZeroDebt gives everyone a clear, real-time picture of who paid for what and the most efficient way to settle balances with zero stress.
+
+**Technical Overview:**
+- **Stack:** Native Android (Kotlin), Jetpack Compose, Material Design 3
+- **Architecture:** MVVM (Model-View-ViewModel), StateFlow, Coroutines, Navigation Compose
+- **Data & Auth:** Local persistence and planned Firebase Authentication / Cloud Firestore sync
 
 ---
 
