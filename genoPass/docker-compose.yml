@@ -1,0 +1,13 @@
+services:
+  genopass-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: genopass-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/.env
+    environment:
+      - PORT=8080
+    restart: unless-stopped
