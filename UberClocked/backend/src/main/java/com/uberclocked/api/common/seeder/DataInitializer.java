@@ -1,14 +1,31 @@
 package com.uberclocked.api.common.seeder;
 
+import com.uberclocked.api.cart.model.entity.Cart;
+import com.uberclocked.api.cart.model.entity.CartStatus;
+import com.uberclocked.api.cart.repository.CartRepository;
+import com.uberclocked.api.company.model.entity.Company;
+import com.uberclocked.api.company.repository.CompanyRepository;
 import com.uberclocked.api.component.model.entity.Component;
 import com.uberclocked.api.component.model.entity.field.FieldType;
 import com.uberclocked.api.component.repository.ComponentRepository;
+import com.uberclocked.api.market.model.entity.Post;
+import com.uberclocked.api.market.model.entity.PostStatus;
+import com.uberclocked.api.market.repository.PostRepository;
 import com.uberclocked.api.product.model.entity.Product;
 import com.uberclocked.api.product.repository.ProductRepository;
+import com.uberclocked.api.promotion.model.entity.Promotion;
+import com.uberclocked.api.promotion.repository.PromotionRepository;
+import com.uberclocked.api.review.model.entity.Review;
+import com.uberclocked.api.review.repository.ReviewRepository;
+import com.uberclocked.api.user.model.entity.User;
+import com.uberclocked.api.user.model.entity.UserStatus;
+import com.uberclocked.api.user.repository.UsersRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -24,17 +41,95 @@ public class DataInitializer implements CommandLineRunner {
 
   private final ComponentRepository componentRepository;
   private final ProductRepository productRepository;
+  private final UsersRepository usersRepository;
+  private final CartRepository cartRepository;
+  private final CompanyRepository companyRepository;
+  private final ReviewRepository reviewRepository;
+  private final PostRepository postRepository;
+  private final PromotionRepository promotionRepository;
 
   public DataInitializer(
-      ComponentRepository componentRepository, ProductRepository productRepository) {
+      ComponentRepository componentRepository,
+      ProductRepository productRepository,
+      UsersRepository usersRepository,
+      CartRepository cartRepository,
+      CompanyRepository companyRepository,
+      ReviewRepository reviewRepository,
+      PostRepository postRepository,
+      PromotionRepository promotionRepository) {
     this.componentRepository = componentRepository;
     this.productRepository = productRepository;
+    this.usersRepository = usersRepository;
+    this.cartRepository = cartRepository;
+    this.companyRepository = companyRepository;
+    this.reviewRepository = reviewRepository;
+    this.postRepository = postRepository;
+    this.promotionRepository = promotionRepository;
   }
 
   @Override
   @Transactional
   public void run(String... args) {
+    log.info("Starting UberClocked complete database initialization...");
+    seedCompanies();
+    seedUsersAndCarts();
     seedComponentsAndProducts();
+    seedReviews();
+    seedMarketplacePosts();
+    seedPromotions();
+    log.info("UberClocked database initialization completed!");
+  }
+
+  private void seedCompanies() {
+    if (companyRepository.count() > 0) return;
+
+    Company c1 = new Company();
+    c1.setId(UUID.randomUUID());
+    c1.setName("TechCorp Solutions");
+    c1.setCuit("30-71234567-8");
+    c1.setEmailDomain("techcorp.com");
+    c1.setPhone("+54 11 4567-8900");
+    companyRepository.save(c1);
+
+    Company c2 = new Company();
+    c2.setId(UUID.randomUUID());
+    c2.setName("Custom PCs Argentina");
+    c2.setCuit("30-89123456-9");
+    c2.setEmailDomain("custompcs.com");
+    c2.setPhone("+54 11 5678-1234");
+    companyRepository.save(c2);
+  }
+
+  private void seedUsersAndCarts() {
+    // Admins
+    getOrCreateUser("auth0|admin_santino", "Santino Colombo", "santinocolombo13@gmail.com", "Argentina", "+5491133334444");
+    getOrCreateUser("auth0|admin_santiago", "Santiago Garrote", "santiagogarrote2005@gmail.com", "Argentina", "+5491155556666");
+
+    // Mock Users
+    getOrCreateUser("auth0|mock_juan_perez", "Juan Perez", "juan.perez@gmail.com", "Argentina", "+5491122334455");
+    getOrCreateUser("auth0|mock_lucia_gomez", "Lucia Gomez", "lucia.gomez@techcorp.com", "Argentina", "+5491166778899");
+    getOrCreateUser("auth0|mock_carlos_rodriguez", "Carlos Rodriguez", "carlos.rodriguez@overclock.io", "Argentina", "+5491177889900");
+    getOrCreateUser("auth0|mock_valen_martinez", "Valentina Martinez", "valen.martinez@gmail.com", "Argentina", "+5491188990011");
+    getOrCreateUser("auth0|mock_matias_benitez", "Matias Benitez", "matias.benitez@custompcs.com", "Argentina", "+5491199001122");
+  }
+
+  private User getOrCreateUser(String auth0Id, String name, String email, String country, String phone) {
+    return usersRepository.findByEmail(email).orElseGet(() -> {
+      User u = new User(auth0Id, name, email);
+      u.setCountry(country);
+      u.setCellPhone(phone);
+      u.setUserStatus(UserStatus.ACTIVE);
+      u.setLastLogin(LocalDateTime.now().minusDays(1));
+      u = usersRepository.save(u);
+
+      Cart cart = new Cart();
+      cart.setUser(u);
+      cart.setStatus(CartStatus.ACTIVE);
+      cart.setCreatedAt(LocalDateTime.now());
+      cartRepository.save(cart);
+
+      return u;
+    });
   }
 
   public void seedComponentsAndProducts() {
@@ -390,12 +485,18 @@ public class DataInitializer implements CommandLineRunner {
     seeds.add(new ProductSeedData("PERIPH-SHURE-MV7", "Shure MV7 USB/XLR Dynamic Podcast & Gaming Microphone", "PERIPHERAL", 249.99, 20, Map.of("brand", "Shure", "category", "Microphone", "connectivity", "Dual USB / XLR", "color", "Black")));
     seeds.add(new ProductSeedData("PERIPH-LOGI-G240-PAD", "Logitech G240 Cloth Gaming Mouse Pad Large", "PERIPHERAL", 19.99, 100, Map.of("brand", "Logitech G", "category", "Mousepad", "connectivity", "Non-Slip Rubber Base", "color", "Black")));
 
+    Map<String, byte[]> categoryImages = fetchCategoryImages();
+
     for (ProductSeedData d : seeds) {
       if (!productRepository.existsById(d.sku)) {
         Component c = compMap.get(d.componentSkuPrefix);
         if (c != null) {
           Product p = new Product(d.sku, d.name, c, d.price, d.stock);
           p.setActive(true);
+          byte[] img = categoryImages.get(d.componentSkuPrefix);
+          if (img != null) {
+            p.setImage(img);
+          }
           for (Map.Entry<String, String> attr : d.attributes.entrySet()) {
             p.updateAttribute(attr.getKey(), attr.getValue());
           }
@@ -404,7 +505,164 @@ public class DataInitializer implements CommandLineRunner {
       }
     }
 
+    // Update any existing products that lack images
+    if (!categoryImages.isEmpty()) {
+      List<Product> productsWithoutImage = productRepository.findAll().stream()
+          .filter(p -> p.getImage() == null)
+          .toList();
+      for (Product p : productsWithoutImage) {
+        String prefix = p.getComponent().getSkuPrefix();
+        byte[] img = categoryImages.get(prefix);
+        if (img != null) {
+          p.setImage(img);
+          productRepository.save(p);
+        }
+      }
+    }
+
     log.info("Successfully finished seeding {} total products in database!", productRepository.count());
+  }
+
+  private void seedReviews() {
+    if (reviewRepository.count() > 0) return;
+
+    User juan = usersRepository.findByEmail("juan.perez@gmail.com").orElse(null);
+    User lucia = usersRepository.findByEmail("lucia.gomez@techcorp.com").orElse(null);
+    User carlos = usersRepository.findByEmail("carlos.rodriguez@overclock.io").orElse(null);
+
+    if (juan == null || lucia == null || carlos == null) return;
+
+    productRepository.findById("CPU-AMD-R7-7800X3D").ifPresent(p -> {
+      createReview(juan, p, 5, "El mejor procesador para gaming por lejos. Temperaturas excelentes y rendimiento brutal con mi 4080.");
+      createReview(carlos, p, 5, "Increíble eficiencia energética y 3D V-Cache rinde de maravilla en simulación y FPS.");
+    });
+
+    productRepository.findById("GPU-NV-RTX-4090-ROG").ifPresent(p -> {
+      createReview(carlos, p, 5, "Una bestia imparable. Corre cualquier juego en 4K 144Hz sin despeinarse. El disipador es gigantesco pero silencioso.");
+    });
+
+    productRepository.findById("SD-SAMSUNG-990PRO-2TB").ifPresent(p -> {
+      createReview(lucia, p, 5, "Velocidades de lectura y escritura demenciales. Ideal para compilar proyectos y mover datasets pesados.");
+    });
+
+    productRepository.findById("MON-ASUS-PG27AQDM").ifPresent(p -> {
+      createReview(juan, p, 5, "El panel OLED 240Hz tiene una respuesta instantánea y los negros puros cambian la experiencia completamente.");
+    });
+  }
+
+  private void createReview(User user, Product product, int score, String message) {
+    if (reviewRepository.existsByUserAndProduct(user, product)) return;
+    Review r = new Review();
+    r.setUser(user);
+    r.setProduct(product);
+    r.setQualification(score);
+    r.setMessage(message);
+    r.setCreatedAt(LocalDateTime.now().minusDays(2));
+    reviewRepository.save(r);
+  }
+
+  private void seedMarketplacePosts() {
+    if (postRepository.count() > 0) return;
+
+    User carlos = usersRepository.findByEmail("carlos.rodriguez@overclock.io").orElse(null);
+    User valen = usersRepository.findByEmail("valen.martinez@gmail.com").orElse(null);
+
+    if (carlos != null) {
+      Post post1 = new Post(
+          "GeForce RTX 3070 Ti FTW3 Ultra - Impecable",
+          null,
+          "Vendo RTX 3070 Ti usada solo para gaming 1 año. Con caja y accesorios originales.",
+          399.99,
+          "GPU",
+          carlos,
+          LocalDateTime.now().minusDays(3)
+      );
+      post1.setStatus(PostStatus.ACTIVE);
+      postRepository.save(post1);
+    }
+
+    if (valen != null) {
+      Post post2 = new Post(
+          "Monitor BenQ ZOWIE XL2546K 240Hz Esports",
+          null,
+          "Monitor competitivo 240Hz con tecnología DyAc+. Ideal para CS2 y Valorant.",
+          280.00,
+          "MONITOR",
+          valen,
+          LocalDateTime.now().minusDays(1)
+      );
+      post2.setStatus(PostStatus.ACTIVE);
+      postRepository.save(post2);
+    }
+  }
+
+  private void seedPromotions() {
+    if (promotionRepository.count() > 0) return;
+
+    Promotion promo1 = new Promotion();
+    promo1.setCode("OVERCLOCK10");
+    promo1.setTitle("10% OFF en todo el catálogo");
+    promo1.setDescription("Descuento de bienvenida para tu próxima build.");
+    promo1.setDiscount(10);
+    promo1.setMaxUses(500);
+    promo1.setUsedCount(12);
+    promo1.setActive(true);
+    promo1.setStartDate(LocalDateTime.now().minusDays(10));
+    promo1.setEndDate(LocalDateTime.now().plusMonths(3));
+    promotionRepository.save(promo1);
+
+    Promotion promo2 = new Promotion();
+    promo2.setCode("SANTINO20");
+    promo2.setTitle("20% OFF Cupón Exclusivo");
+    promo2.setDescription("Cupón VIP de lanzamiento.");
+    promo2.setDiscount(20);
+    promo2.setMaxUses(100);
+    promo2.setUsedCount(5);
+    promo2.setActive(true);
+    promo2.setStartDate(LocalDateTime.now().minusDays(5));
+    promo2.setEndDate(LocalDateTime.now().plusMonths(6));
+    promotionRepository.save(promo2);
+  }
+
+  private Map<String, byte[]> fetchCategoryImages() {
+    Map<String, String> urls = Map.of(
+        "CPU", "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&q=80",
+        "GPU", "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&q=80",
+        "MOTHERBOARD", "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80",
+        "RAM", "https://images.unsplash.com/photo-1562976540-1502c2145186?w=400&q=80",
+        "SD", "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&q=80",
+        "CASE", "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=400&q=80",
+        "PSU", "https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=400&q=80",
+        "COOLER", "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&q=80",
+        "MONITOR", "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&q=80",
+        "PERIPHERAL", "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80"
+    );
+
+    Map<String, byte[]> images = new HashMap<>();
+    try {
+      java.net.http.HttpClient client = java.net.http.HttpClient.newBuilder()
+          .connectTimeout(java.time.Duration.ofSeconds(3))
+          .build();
+
+      for (Map.Entry<String, String> entry : urls.entrySet()) {
+        try {
+          java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+              .uri(java.net.URI.create(entry.getValue()))
+              .timeout(java.time.Duration.ofSeconds(4))
+              .GET()
+              .build();
+          java.net.http.HttpResponse<byte[]> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+          if (response.statusCode() == 200 && response.body() != null && response.body().length > 0 && response.body().length <= 400 * 1024) {
+            images.put(entry.getKey(), response.body());
+          }
+        } catch (Exception e) {
+          log.warn("Could not download seed image for category {}: {}", entry.getKey(), e.getMessage());
+        }
+      }
+    } catch (Exception e) {
+      log.warn("Error initializing image client for seeder: {}", e.getMessage());
+    }
+    return images;
   }
 
   private Component getOrCreateComponent(
