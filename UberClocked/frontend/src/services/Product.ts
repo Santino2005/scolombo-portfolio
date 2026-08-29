@@ -3,7 +3,15 @@ import type {Product} from "../types/Entities.ts";
 const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 export async function getProducts(): Promise<Product[]> {
-    return fetch(`${BASE}/products`).then(r => r.json());
+    try {
+        const r = await fetch(`${BASE}/products`);
+        if (!r.ok) return [];
+        const data = await r.json();
+        return Array.isArray(data) ? data : [];
+    } catch (e) {
+        console.error("Failed to fetch products:", e);
+        return [];
+    }
 }
 
 export async function getFilteredProductsPublic(
