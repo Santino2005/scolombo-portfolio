@@ -1,19 +1,28 @@
 import type { ReviewResponseDto, CreateReviewDto, ModifyReviewDataDto, ProductRatingDto } from "../types/Review.ts";
-
 import { fetchWithAuth } from "./api";
+import { API_BASE_URL } from "@/config/api";
 
-const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
+const BASE = API_BASE_URL;
 
 export async function getReviewsByProduct(skuPrefix: string): Promise<ReviewResponseDto[]> {
-    const res = await fetch(`${BASE}/reviews/product/${skuPrefix}`);
-    if (!res.ok) throw new Error("Failed to load reviews");
-    return res.json();
+    try {
+        const res = await fetch(`${BASE}/reviews/product/${encodeURIComponent(skuPrefix)}`);
+        if (!res.ok) return [];
+        const data = await res.json();
+        return Array.isArray(data) ? data : [];
+    } catch {
+        return [];
+    }
 }
 
-export async function getProductRating(skuPrefix: string): Promise<ProductRatingDto> {
-    const res = await fetch(`${BASE}/reviews/product/${skuPrefix}/rating`);
-    if (!res.ok) throw new Error("Failed to load rating");
-    return res.json();
+export async function getProductRating(skuPrefix: string): Promise<ProductRatingDto | null> {
+    try {
+        const res = await fetch(`${BASE}/reviews/product/${encodeURIComponent(skuPrefix)}/rating`);
+        if (!res.ok) return null;
+        return await res.json();
+    } catch {
+        return null;
+    }
 }
 
 export async function createReview(token: string, dto: CreateReviewDto): Promise<ReviewResponseDto> {

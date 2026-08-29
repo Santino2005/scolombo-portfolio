@@ -1,43 +1,39 @@
 import type { Component } from "@/pages/builder/types/Component";
-import {fetchWithAuth} from "@/services/api.ts";
+import { fetchWithAuth } from "@/services/api.ts";
+import { API_BASE_URL } from "@/config/api";
 
-const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
-
-export async function getAll(): Promise<Component[]> {
-  const components = [
-    {
-      id: "1",
-      sku_prefix: "a",
-      display_name: "A",
-    },
-    {
-      id: "2",
-      sku_prefix: "b",
-      display_name: "B",
-    },
-    {
-      id: "3",
-      sku_prefix: "c",
-      display_name: "C",
-    },
-    {
-      id: "4",
-      sku_prefix: "d",
-      display_name: "D",
-    },
-    {
-      id: "5",
-      sku_prefix: "e",
-      display_name: "E",
-    },
-  ] as Component[];
-  return components;
-}
-
-
+const BASE = API_BASE_URL;
 
 export type ComponentDto = { skuPrefix: string; displayName: string };
 
+export async function getAll(): Promise<Component[]> {
+    try {
+        const res = await fetch(`${BASE}/components`);
+        if (!res.ok) return [];
+        const data = await res.json();
+        return Array.isArray(data)
+            ? data.map((c: any) => ({
+                  id: c.skuPrefix,
+                  sku_prefix: c.skuPrefix,
+                  display_name: c.displayName,
+              }))
+            : [];
+    } catch {
+        return [];
+    }
+}
+
 export async function getComponents(token: string) {
-  return fetchWithAuth<ComponentDto[]>(`${BASE}/components`, token);
+    return fetchWithAuth<ComponentDto[]>(`${BASE}/components`, token);
+}
+
+export async function getComponentsPublic(): Promise<ComponentDto[]> {
+    try {
+        const res = await fetch(`${BASE}/components`);
+        if (!res.ok) return [];
+        const data = await res.json();
+        return Array.isArray(data) ? data : [];
+    } catch {
+        return [];
+    }
 }
