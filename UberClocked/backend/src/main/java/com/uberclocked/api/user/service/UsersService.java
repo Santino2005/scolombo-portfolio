@@ -43,7 +43,20 @@ public class UsersService {
     String auth0Id = jwt.getSubject();
 
     String email = jwt.getClaimAsString("https://uberclocked.com/email");
+    if (email == null) {
+      email = jwt.getClaimAsString("email");
+    }
+    if (email == null) {
+      email = auth0Id + "@placeholder.com";
+    }
+
     String name = jwt.getClaimAsString("https://uberclocked.com/name");
+    if (name == null) {
+      name = jwt.getClaimAsString("name");
+    }
+    if (name == null) {
+      name = auth0Id;
+    }
 
     User newUser = new User(auth0Id, name, email);
     newUser.setLastLogin(LocalDateTime.now());

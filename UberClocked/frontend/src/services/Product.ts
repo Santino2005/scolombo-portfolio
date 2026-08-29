@@ -1,6 +1,6 @@
 import type {Product} from "../types/Entities.ts";
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 export async function getProducts(): Promise<Product[]> {
     return fetch(`${BASE}/products`).then(r => r.json());

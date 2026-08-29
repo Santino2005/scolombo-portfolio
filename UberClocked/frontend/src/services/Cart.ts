@@ -2,7 +2,7 @@ import {fetchWithAuth} from "../services/api.ts";
 import type {Cart, CartItem} from "../types/Entities.ts";
 import type {AddCartItemDto} from "../types/PurchaseDto.ts";
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 export async function getMyCart(token: string): Promise<Cart> {
     return fetchWithAuth(`${BASE}/carts/me`, token);

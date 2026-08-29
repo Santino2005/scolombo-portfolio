@@ -54,7 +54,7 @@ export default function EditProductDialog({
     (async () => {
       const token = await getAccessTokenSilently();
       const data = await fetchWithAuth<ComponentDto[]>(
-        "http://localhost:8080/components",
+        `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/components`,
         token
       );
       setComponents(data);
@@ -81,7 +81,7 @@ export default function EditProductDialog({
 
     if (file) formData.append("image", file);
 
-    await fetch(`http://localhost:8080/products/${sku}`, {
+    await fetch(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/products/${sku}`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,

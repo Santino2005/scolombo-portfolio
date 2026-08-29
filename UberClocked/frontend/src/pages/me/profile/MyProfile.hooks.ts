@@ -13,7 +13,7 @@ export function useMyProfile() {
 
     try {
       const token = await getAccessTokenSilently();
-      const data = await fetchWithAuth<UserDataDto>("http://localhost:8080/me", token);
+      const data = await fetchWithAuth<UserDataDto>(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/me`, token);
       setProfile(data);
     } catch (e) {
       console.error(e);
@@ -25,7 +25,7 @@ export function useMyProfile() {
     setLoading(true);
     try {
       const token = await getAccessTokenSilently();
-      await fetchWithAuth<UserDataDto>("http://localhost:8080/me", token, {
+      await fetchWithAuth<UserDataDto>(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/me`, token, {
         method: "PATCH",
         body: JSON.stringify(updated),
       });
@@ -44,7 +44,7 @@ export function useMyProfile() {
 
     try {
       const token = await getAccessTokenSilently();
-      await fetchWithAuth("http://localhost:8080/me", token, { method: "DELETE" });
+      await fetchWithAuth(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/me`, token, { method: "DELETE" });
       alert("Account deleted");
       logout({ logoutParams: { returnTo: window.location.origin } });
     } catch (e) {

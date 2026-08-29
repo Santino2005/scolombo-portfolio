@@ -16,7 +16,7 @@ export default function AuthCallback() {
             const token = await getAccessTokenSilently();
 
             await fetchWithAuth(
-                "http://localhost:8080/me",
+                `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/me`,
                 token,
                 { method: "GET" }
             );

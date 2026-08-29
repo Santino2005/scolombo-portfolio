@@ -24,7 +24,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Getter
 public class CartItem {
 
-  @Id @GeneratedValue private UUID id;
+  @Id @GeneratedValue @Setter private UUID id;
 
   public UUID id() {
     return id;

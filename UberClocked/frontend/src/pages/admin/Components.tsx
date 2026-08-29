@@ -32,7 +32,7 @@ export default function Components() {
       const token = await getAccessTokenSilently();
 
       const data = await fetchWithAuth<ComponentDto[]>(
-        "http://localhost:8080/components",
+        `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/components`,
         token
       );
 
@@ -53,7 +53,7 @@ export default function Components() {
       const token = await getAccessTokenSilently();
 
       await fetchWithAuth<void>(
-        `http://localhost:8080/components/${code}`,
+        `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/components/${code}`,
         token,
         { method: "DELETE" }
       );

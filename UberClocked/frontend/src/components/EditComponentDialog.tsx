@@ -94,7 +94,7 @@ export default function EditComponentDialog({
     const token = await getAccessTokenSilently();
 
     await fetchWithAuth(
-      `http://localhost:8080/components/${component.skuPrefix}`,
+      `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/components/${component.skuPrefix}`,
       token,
       {
         method: "PATCH",

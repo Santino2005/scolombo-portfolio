@@ -1,12 +1,40 @@
 spring:
+  application:
+    name: web-api-test
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
-    password:
-
+    password: ""
   jpa:
     hibernate:
       ddl-auto: create-drop
     show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-3xpqpzjayt0s15u2.us.auth0.com/
+
+mp:
+  api-token: test-mp-token
+
+auth0:
+  audience: https://UberClocked-api
+
+app:
+  admin:
+    emails: santinocolombo13@gmail.com,santiagogarrote2005@gmail.com
 

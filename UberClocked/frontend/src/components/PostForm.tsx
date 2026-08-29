@@ -92,7 +92,7 @@ export default function PostForm({
     (async () => {
       try {
         const token = await getAccessTokenSilently();
-        const data = await fetchWithAuth<ComponentDto[]>("http://localhost:8080/components", token);
+        const data = await fetchWithAuth<ComponentDto[]>(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/components`, token);
         setComponents(data);
 
         // si no hay categorySku (create), usar la primera

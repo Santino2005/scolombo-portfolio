@@ -28,6 +28,7 @@ public class Review {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
+  @Setter
   private UUID id;
 
   @ManyToOne(optional = false)

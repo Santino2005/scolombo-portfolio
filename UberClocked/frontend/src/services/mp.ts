@@ -5,7 +5,7 @@ import type { UUID } from "@/types/Market";
 import {fetchWithAuth, postWithAuth} from "./api";
 
 
-const BASE_URL = "http://localhost:8080/mp";
+const BASE_URL = `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/mp`;
 
 export async function generatePreference(token: string) {
   return postWithAuth<{ id: string }, {}>(`${BASE_URL}/preference`, token);

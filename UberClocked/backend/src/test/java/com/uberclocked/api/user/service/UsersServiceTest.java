@@ -10,7 +10,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.uberclocked.api.cart.repository.CartRepository;
 import com.uberclocked.api.common.exceptions.ResourceDoesNotExistsException;
+import com.uberclocked.api.company.service.CompanyService;
+import com.uberclocked.api.company.service.CompanyUserService;
 import com.uberclocked.api.user.mapper.UserMapper;
 import com.uberclocked.api.user.model.dto.UserDataDto;
 import com.uberclocked.api.user.model.entity.User;
@@ -29,8 +32,10 @@ import org.springframework.security.oauth2.jwt.Jwt;
 class UsersServiceTest {
 
   @Mock UsersRepository repository;
-
   @Mock UserMapper mapper;
+  @Mock CartRepository cartRepository;
+  @Mock CompanyService companyService;
+  @Mock CompanyUserService companyUserService;
 
   @InjectMocks UsersService service;
 
@@ -102,7 +107,7 @@ class UsersServiceTest {
     when(repository.findByAuth0Id(auth0Id)).thenReturn(Optional.of(user));
     when(repository.save(any(User.class))).thenAnswer(inv -> inv.getArgument(0));
 
-    UserDataDto dto = new UserDataDto("Nuevo", null, "UY", null);
+    UserDataDto dto = new UserDataDto(null, "Nuevo", null, "UY", null);
 
     User result = service.updateData(jwt, dto);
 
@@ -120,24 +125,24 @@ class UsersServiceTest {
     Jwt jwt = jwt("auth0|missing", "x@mail.com", "X");
     when(repository.findByAuth0Id("auth0|missing")).thenReturn(Optional.empty());
 
-    UserDataDto dto = new UserDataDto("Name", null, null, null);
+    UserDataDto dto = new UserDataDto(null, "Name", null, null, null);
 
     assertThrows(ResourceDoesNotExistsException.class, () -> service.updateData(jwt, dto));
     verify(repository, never()).save(any());
   }
 
   @Test
-  void delete_whenUserExists_callsDeleteByAuth0Id() {
+  void delete_whenUserExists_callsDelete() {
     String auth0Id = "auth0|me";
     Jwt jwt = jwt(auth0Id, "", "");
+    User user = new User(auth0Id, "Santino", "santino@mail.com");
 
-    when(repository.findByAuth0Id(auth0Id))
-        .thenReturn(Optional.of(new User(auth0Id, "Santino", "santino@mail.com")));
+    when(repository.findByAuth0Id(auth0Id)).thenReturn(Optional.of(user));
 
     service.delete(jwt);
 
     verify(repository).findByAuth0Id(auth0Id);
-    verify(repository).deleteByAuth0Id(auth0Id);
+    verify(repository).delete(user);
   }
 
   @Test
@@ -150,6 +155,6 @@ class UsersServiceTest {
     assertThrows(ResourceDoesNotExistsException.class, () -> service.delete(jwt));
 
     verify(repository).findByAuth0Id(auth0Id);
-    verify(repository, never()).deleteByAuth0Id(any());
+    verify(repository, never()).delete(any());
   }
 }

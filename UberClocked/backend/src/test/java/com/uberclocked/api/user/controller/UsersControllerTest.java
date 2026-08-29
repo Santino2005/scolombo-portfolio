@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,16 +37,16 @@ class UsersControllerTest {
   @MockitoBean UserMapper userMapper;
 
   @Test
-  void createUser_whenValid_returns200_andMapsNullsToEmpty() throws Exception {
+  void getMe_whenValid_returns200_andMapsNullsToEmpty() throws Exception {
     User user = new User("auth0|123", "Santino", "santino@mail.com");
 
     when(usersService.getUserOrCreate(any())).thenReturn(user);
     when(userMapper.toDto(any()))
-        .thenReturn(new UserDataDto("Santino", "santino@mail.com", "", ""));
+        .thenReturn(new UserDataDto(null, "Santino", "santino@mail.com", "", ""));
 
     mockMvc
         .perform(
-            post("/me")
+            get("/me")
                 .with(csrf())
                 .with(jwt().jwt(j -> j.subject("auth0|123")))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -58,18 +58,18 @@ class UsersControllerTest {
   }
 
   @Test
-  void createUser_whenValid_returns200_withCountryAndCellPhone() throws Exception {
+  void getMe_whenValid_returns200_withCountryAndCellPhone() throws Exception {
     User user = new User("auth0|123", "Santino", "santino@mail.com");
     user.setCountry("AR");
     user.setCellPhone("+54 11 1234-5678");
 
     when(usersService.getUserOrCreate(any())).thenReturn(user);
     when(userMapper.toDto(any()))
-        .thenReturn(new UserDataDto("Santino", "santino@mail.com", "AR", "+54 11 1234-5678"));
+        .thenReturn(new UserDataDto(null, "Santino", "santino@mail.com", "AR", "+54 11 1234-5678"));
 
     mockMvc
         .perform(
-            post("/me")
+            get("/me")
                 .with(csrf())
                 .with(jwt().jwt(j -> j.subject("auth0|123")))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -84,7 +84,7 @@ class UsersControllerTest {
 
     when(usersService.updateData(any(), any())).thenReturn(updated);
     when(userMapper.toDto(any()))
-        .thenReturn(new UserDataDto("Santino", "santino@mail.com", "", ""));
+        .thenReturn(new UserDataDto(null, "Santino", "santino@mail.com", "", ""));
 
     mockMvc
         .perform(
@@ -111,7 +111,7 @@ class UsersControllerTest {
 
     when(usersService.updateData(any(), any())).thenReturn(updated);
     when(userMapper.toDto(any()))
-        .thenReturn(new UserDataDto("Santino", "santino@mail.com", "AR", "+54 11 1234-5678"));
+        .thenReturn(new UserDataDto(null, "Santino", "santino@mail.com", "AR", "+54 11 1234-5678"));
 
     mockMvc
         .perform(

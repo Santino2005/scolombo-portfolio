@@ -42,7 +42,7 @@ export default function PostDetailPage() {
 
     async function loadProfile() {
       const token = await getAccessTokenSilently();
-      const data = await fetchWithAuth<UserDataDto>("http://localhost:8080/me", token);
+      const data = await fetchWithAuth<UserDataDto>(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/me`, token);
       setMyUserId(data.id);
     }
 

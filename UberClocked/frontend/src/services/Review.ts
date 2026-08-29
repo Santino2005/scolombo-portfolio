@@ -2,7 +2,7 @@ import type { ReviewResponseDto, CreateReviewDto, ModifyReviewDataDto, ProductRa
 
 import { fetchWithAuth } from "./api";
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 export async function getReviewsByProduct(skuPrefix: string): Promise<ReviewResponseDto[]> {
     const res = await fetch(`${BASE}/reviews/product/${skuPrefix}`);

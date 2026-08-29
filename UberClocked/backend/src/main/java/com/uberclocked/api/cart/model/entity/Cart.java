@@ -23,7 +23,7 @@ import lombok.Setter;
 @Table(name = "cart")
 @Getter
 public class Cart {
-  @Id @GeneratedValue private UUID id;
+  @Id @GeneratedValue @Setter private UUID id;
 
   @ManyToOne @Setter private User user;
 

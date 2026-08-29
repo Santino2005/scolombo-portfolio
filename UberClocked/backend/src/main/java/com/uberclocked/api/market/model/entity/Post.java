@@ -20,6 +20,7 @@ public class Post {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
+  @Setter
   private UUID id;
 
   @Setter private String title;
@@ -38,9 +39,9 @@ public class Post {
   @Setter
   private PostStatus status;
 
-  private LocalDateTime createdAt;
+  @Setter private LocalDateTime createdAt;
 
-  @ManyToOne private User seller;
+  @ManyToOne @Setter private User seller;
 
   public Post() {}
 

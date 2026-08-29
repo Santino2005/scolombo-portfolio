@@ -1,4 +1,4 @@
-const API = "http://localhost:8080";
+const API = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 async function authedFetch<T>(getToken: () => Promise<string>, path: string, init?: RequestInit): Promise<T> {
     const token = await getToken();

@@ -35,7 +35,7 @@ export default function EditPostPage() {
 
         (async () => {
             const token = await getAccessTokenSilently();
-            const me = await fetchWithAuth<UserDataDto>("http://localhost:8080/me", token);
+            const me = await fetchWithAuth<UserDataDto>(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/me`, token);
             setMyUserId(me.id);
         })();
     }, [isAuthenticated, getAccessTokenSilently]);

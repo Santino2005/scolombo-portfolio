@@ -80,7 +80,7 @@ export default function ProductsUser() {
       try {
         const token = await getAccessTokenSilently();
         const data = await fetchWithAuth<ComponentDto[]>(
-            "http://localhost:8080/components",
+            `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/components`,
             token
         );
         setComponents(data);

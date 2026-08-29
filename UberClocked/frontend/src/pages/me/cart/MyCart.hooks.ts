@@ -3,7 +3,7 @@ import { generatePreference } from "@/services/mp";
 import type { Cart } from "@/types/Entities";
 import { useEffect, useState } from "react";
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 export function useCart(getToken: () => Promise<string>) {
   const [cart, setCart] = useState<Cart | null>(null);

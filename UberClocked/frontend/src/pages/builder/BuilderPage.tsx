@@ -267,7 +267,7 @@ export default function BuilderPage() {
   }
 
   async function replaceCartItemComponents(token: string, itemId: string, components: Record<string, string>) {
-    return fetchWithAuth(`http://localhost:8080/carts/me/items/${itemId}/components/bulk`, token, {
+    return fetchWithAuth(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/carts/me/items/${itemId}/components/bulk`, token, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ components }),

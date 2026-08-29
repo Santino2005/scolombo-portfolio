@@ -10,7 +10,7 @@ export function useEnsureUser() {
         async function ensureUserExists() {
             const token = await getAccessTokenSilently();
 
-            await fetch("http://localhost:8080/me", {
+            await fetch(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/me`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`

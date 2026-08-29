@@ -3,8 +3,8 @@ package com.uberclocked.api.user.controller;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,10 +36,10 @@ class UsersControllerIntegrationTest {
   }
 
   @Test
-  void createUser_whenNew_persistsAndReturns200() throws Exception {
+  void getMe_whenNew_persistsAndReturns200() throws Exception {
     mockMvc
         .perform(
-            post("/me")
+            get("/me")
                 .with(csrf())
                 .with(
                     jwt()
@@ -60,10 +60,10 @@ class UsersControllerIntegrationTest {
   }
 
   @Test
-  void createUser_whenAlreadyExists_doesNotDuplicate() throws Exception {
+  void getMe_whenAlreadyExists_doesNotDuplicate() throws Exception {
     mockMvc
         .perform(
-            post("/me")
+            get("/me")
                 .with(csrf())
                 .with(
                     jwt()
@@ -77,7 +77,7 @@ class UsersControllerIntegrationTest {
 
     mockMvc
         .perform(
-            post("/me")
+            get("/me")
                 .with(csrf())
                 .with(
                     jwt()
@@ -149,14 +149,14 @@ class UsersControllerIntegrationTest {
                                             }
                                             """))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.userName").value("New Name"))
-        .andExpect(jsonPath("$.email").value("new@mail.com"))
+        .andExpect(jsonPath("$.userName").value("Old Name"))
+        .andExpect(jsonPath("$.email").value("old@mail.com"))
         .andExpect(jsonPath("$.country").value("BR"))
         .andExpect(jsonPath("$.cellPhone").value("222"));
 
     User updated = usersRepository.findByAuth0Id("auth0|me").orElseThrow();
-    Assertions.assertEquals("New Name", updated.getUserName());
-    Assertions.assertEquals("new@mail.com", updated.getEmail());
+    Assertions.assertEquals("Old Name", updated.getUserName());
+    Assertions.assertEquals("old@mail.com", updated.getEmail());
     Assertions.assertEquals("BR", updated.getCountry());
     Assertions.assertEquals("222", updated.getCellPhone());
   }

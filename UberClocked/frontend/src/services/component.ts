@@ -1,7 +1,7 @@
 import type { Component } from "@/pages/builder/types/Component";
 import {fetchWithAuth} from "@/services/api.ts";
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 export async function getAll(): Promise<Component[]> {
   const components = [

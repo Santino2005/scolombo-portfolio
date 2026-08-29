@@ -57,7 +57,7 @@ export type PromotionDto = {
 type UpdatePromotionBody = Partial<CreatePromotionBody>;
 
 function apiBase() {
-    return  "http://localhost:8080";
+    return (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 }
 
 async function authedFetch(getToken: () => Promise<string>, input: RequestInfo, init?: RequestInit) {

@@ -81,7 +81,7 @@ export default function CreateComponentDialog({
       const token = await getAccessTokenSilently();
 
       await fetchWithAuth(
-        "http://localhost:8080/components",
+        `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/components`,
         token,
         {
           method: "POST",

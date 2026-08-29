@@ -17,7 +17,7 @@ export type ApplicablePromotionDto = {
     targets: any[];
 };
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 async function authedFetch(getToken: () => Promise<string>, path: string) {
     const token = await getToken();

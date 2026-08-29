@@ -33,7 +33,7 @@ export default function AdminCompaniesPage() {
         setLoading(true);
         setError("");
 
-        fetchWithAuth("http://localhost:8080/companies", token)
+        fetchWithAuth(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/companies`, token)
             .then((data) => setCompanies(data))
             .catch((e) => setError(e?.message || "Failed to load companies"))
             .finally(() => setLoading(false));

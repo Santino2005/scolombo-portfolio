@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.uberclocked.api.cart.repository.CartRepository;
 import com.uberclocked.api.common.exceptions.ResourceDoesNotExistsException;
+import com.uberclocked.api.company.service.CompanyService;
+import com.uberclocked.api.company.service.CompanyUserService;
 import com.uberclocked.api.user.mapper.UserMapperImpl;
 import com.uberclocked.api.user.model.dto.UserDataDto;
 import com.uberclocked.api.user.model.entity.User;
@@ -18,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
 @Import({UsersService.class, UserMapperImpl.class})
@@ -25,6 +29,9 @@ class UsersServiceJpaTest {
 
   @Autowired UsersService service;
   @Autowired UsersRepository repository;
+  @MockitoBean CartRepository cartRepository;
+  @MockitoBean CompanyService companyService;
+  @MockitoBean CompanyUserService companyUserService;
 
   private Jwt jwt(String sub, String email, String name) {
     return new Jwt(
@@ -67,12 +74,12 @@ class UsersServiceJpaTest {
 
     service.getUserOrCreate(jwt);
 
-    UserDataDto dto = new UserDataDto("Nuevo Nombre", null, "AR", null);
+    UserDataDto dto = new UserDataDto(null, "Nuevo Nombre", null, "AR", null);
 
     service.updateData(jwt, dto);
 
     User stored = repository.findByAuth0Id(auth0Id).orElseThrow();
-    assertEquals("Nuevo Nombre", stored.getUserName());
+    assertEquals("Original", stored.getUserName());
     assertEquals("mail@test.com", stored.getEmail());
     assertEquals("AR", stored.getCountry());
     assertNull(stored.getCellPhone());
@@ -81,24 +88,25 @@ class UsersServiceJpaTest {
   @Test
   void update_whenUserDoesNotExist_throwsException() {
     Jwt jwt = jwt("auth0|missing", "x@mail.com", "X");
-    UserDataDto dto = new UserDataDto("Name", null, null, null);
+    UserDataDto dto = new UserDataDto(null, "Name", null, null, null);
 
     assertThrows(ResourceDoesNotExistsException.class, () -> service.updateData(jwt, dto));
   }
 
   @Test
-  void deleteByAuth0Id_whenUserExists_deletesRow() {
+  void delete_whenUserExists_deletesRow() {
     String auth0Id = "auth0|123";
     repository.save(new User(auth0Id, "Santino", "santino@mail.com"));
 
-    repository.deleteByAuth0Id(auth0Id);
+    Jwt jwt = jwt(auth0Id, "santino@mail.com", "Santino");
+    service.delete(jwt);
 
     assertTrue(repository.findByAuth0Id(auth0Id).isEmpty());
   }
 
   @Test
-  void deleteByAuth0Id_whenMissing_doesNothing() {
-    repository.deleteByAuth0Id("auth0|missing");
-    assertEquals(0, repository.count());
+  void delete_whenMissing_throwsException() {
+    Jwt jwt = jwt("auth0|missing", "missing@mail.com", "Missing");
+    assertThrows(ResourceDoesNotExistsException.class, () -> service.delete(jwt));
   }
 }

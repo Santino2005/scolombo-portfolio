@@ -1,7 +1,7 @@
 import { fetchWithAuth } from "../services/api.ts";
 import type { PurchaseResponseDto, UpdatePurchaseDto } from "../types/PurchaseDto.ts";
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 export async function createPurchase(token: string): Promise<PurchaseResponseDto> {
     return fetchWithAuth(`${BASE}/purchases/me`, token, { method: "POST" });

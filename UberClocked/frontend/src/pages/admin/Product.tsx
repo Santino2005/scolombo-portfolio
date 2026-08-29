@@ -15,7 +15,7 @@ export default function Products() {
   async function loadProducts() {
     const token = await getAccessTokenSilently();
     const data = await fetchWithAuth<Product[]>(
-      "http://localhost:8080/products",
+      `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/products`,
       token
     );
     setProducts(data);
@@ -27,7 +27,7 @@ export default function Products() {
 
     const token = await getAccessTokenSilently();
     await fetchWithAuth(
-      `http://localhost:8080/products/${sku}`,
+      `${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/products/${sku}`,
       token,
       { method: "DELETE" }
     );

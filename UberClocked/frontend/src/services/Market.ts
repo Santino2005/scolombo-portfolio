@@ -8,7 +8,7 @@ import type {
   UUID
 } from "@/types/Market";
 
-const BASE = "http://localhost:8080";
+const BASE = (import.meta.env.VITE_API_URL as string) || "http://localhost:8080";
 
 // PUBLIC
 

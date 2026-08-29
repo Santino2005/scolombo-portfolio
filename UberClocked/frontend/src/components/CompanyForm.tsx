@@ -34,7 +34,7 @@ export default function CompanyForm({
         setError("");
 
         try {
-            await fetchWithAuth("http://localhost:8080/companies", token, {
+            await fetchWithAuth(`${(import.meta.env.VITE_API_URL as string) || "http://localhost:8080"}/companies`, token, {
                 method: "POST",
                 body: JSON.stringify(form),
             });
