@@ -79,26 +79,41 @@ public class WheelService {
     return res;
   }
 
+  public record PrizeConfig(String label, int discount, int weight) {}
+
+  public static final List<PrizeConfig> PRIZE_POOL =
+      List.of(
+          new PrizeConfig("5% OFF", 5, 35),
+          new PrizeConfig("10% OFF", 10, 25),
+          new PrizeConfig("15% OFF", 15, 20),
+          new PrizeConfig("20% OFF", 20, 12),
+          new PrizeConfig("25% OFF", 25, 6),
+          new PrizeConfig("50% OFF", 50, 2));
+
+  public List<WheelDto.WheelPrizeDto> getPrizes() {
+    return PRIZE_POOL.stream()
+        .map(
+            p -> {
+              var dto = new WheelDto.WheelPrizeDto();
+              dto.label = p.label();
+              dto.discount = p.discount();
+              dto.targets = List.of();
+              return dto;
+            })
+        .toList();
+  }
+
   private Instant tomorrowStart(ZoneId zone) {
     return LocalDate.now(zone).plusDays(1).atStartOfDay(zone).toInstant();
   }
 
   private WheelDto.WheelPrizeDto pickPrize() {
-    record P(String label, int discount, int weight) {}
-    var pool =
-        List.of(
-            new P("5% OFF", 5, 40),
-            new P("10% OFF", 10, 30),
-            new P("15% OFF", 15, 20),
-            new P("20% OFF", 20, 9),
-            new P("FREE", 0, 1));
-
-    int total = pool.stream().mapToInt(P::weight).sum();
+    int total = PRIZE_POOL.stream().mapToInt(PrizeConfig::weight).sum();
     int r = rng.nextInt(total);
 
-    P chosen = pool.get(0);
+    PrizeConfig chosen = PRIZE_POOL.get(0);
     int acc = 0;
-    for (var p : pool) {
+    for (var p : PRIZE_POOL) {
       acc += p.weight();
       if (r < acc) {
         chosen = p;

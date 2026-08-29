@@ -23,35 +23,58 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: hsl(60 56% 96%);
-  --foreground: hsl(204 18% 20%);
-  --primary: hsl(30 90% 45%);
-  --card: hsl(60 40% 92%);
-  --card-foreground: hsl(204 18% 20%);
-  --border: hsl(204 18% 38% / 0.4);
-  --muted: hsl(204 12% 40%);
-  --error: hsl(0, 100%, 58.6%);
+  --radius: 0.75rem;
+  --background: hsl(240 10% 4%);
+  --foreground: hsl(0 0% 98%);
+  --primary: hsl(24 95% 53%);
+  --card: hsl(240 10% 6%);
+  --card-foreground: hsl(0 0% 98%);
+  --border: hsl(240 6% 15%);
+  --muted: hsl(240 5% 55%);
+  --error: hsl(0 84% 60%);
 }
 
 .dark {
-  --background: hsl(204 18% 14%);
-  --foreground: hsl(60 56% 92%);
-  --primary: hsl(30 95% 60%);
-  --card: hsl(204 16% 32%);
-  --card-foreground: hsl(60 56% 92%);
-  --muted: hsl(204 10% 60%);
-  --error: hsl(0, 100%, 58.6%);
+  --background: hsl(240 10% 4%);
+  --foreground: hsl(0 0% 98%);
+  --primary: hsl(24 95% 53%);
+  --card: hsl(240 10% 6%);
+  --card-foreground: hsl(0 0% 98%);
+  --border: hsl(240 6% 15%);
+  --muted: hsl(240 5% 55%);
+  --error: hsl(0 84% 60%);
 }
 
 @layer base {
+  * {
+    border-color: var(--border);
+  }
+
   html,
   body,
   #root {
     height: 100%;
+    background-color: #09090b;
+    color: #f4f4f5;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased selection:bg-orange-500/30 selection:text-orange-200;
   }
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f97316;
 }

@@ -20,6 +20,11 @@ public class WheelController {
     this.wheelService = wheelService;
   }
 
+  @GetMapping("/prizes")
+  public java.util.List<WheelDto.WheelPrizeDto> prizes() {
+    return wheelService.getPrizes();
+  }
+
   @GetMapping("/status")
   public WheelDto.WheelStatusResponse status(@AuthenticationPrincipal Jwt jwt) {
     String userId = jwt.getSubject();
