@@ -41,4 +41,13 @@ class GuardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Login successful"));
     }
+
+    @Test
+    void register_Success() throws Exception {
+        mockMvc.perform(post("/guard/register")
+                        .param("username", "newAdmin")
+                        .param("pin", "5678"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Guard registered successfully"));
+    }
 }

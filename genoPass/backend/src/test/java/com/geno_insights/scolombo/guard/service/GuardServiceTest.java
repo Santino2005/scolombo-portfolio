@@ -68,4 +68,42 @@ class GuardServiceTest {
         );
         assertEquals("Guard not found", exception.getMessage());
     }
+
+    @Test
+    void register_Success() {
+        when(guardRepository.findByUserName("newGuard")).thenReturn(Optional.empty());
+        when(guardRepository.save(any(Guard.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Guard created = guardService.register("newGuard", "9999");
+        assertNotNull(created);
+        assertEquals("newGuard", created.getUserName());
+        assertTrue(encoder.matches("9999", created.getHashedPin()));
+        verify(guardRepository).save(any(Guard.class));
+    }
+
+    @Test
+    void register_EmptyUsername_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                guardService.register("", "1234")
+        );
+        assertEquals("Username cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    void register_EmptyPin_ThrowsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                guardService.register("newGuard", "  ")
+        );
+        assertEquals("PIN cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    void register_AlreadyExists_ThrowsException() {
+        when(guardRepository.findByUserName("guardAdmin")).thenReturn(Optional.of(testGuard));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                guardService.register("guardAdmin", "1234")
+        );
+        assertEquals("Guard username already exists", exception.getMessage());
+    }
 }

@@ -5,3 +5,9 @@ export function loginGuard(username, pin) {
         params: { username, pin },
     });
 }
+
+export function registerGuard(username, pin) {
+    return api.post("/guard/register", null, {
+        params: { username, pin },
+    });
+}

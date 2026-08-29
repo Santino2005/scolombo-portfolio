@@ -28,4 +28,22 @@ public class GuardService {
 
         return "Login successful";
     }
+
+    public Guard register(String username, String pin) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
+        if (pin == null || pin.trim().isEmpty()) {
+            throw new IllegalArgumentException("PIN cannot be empty");
+        }
+        String cleanUsername = username.trim();
+        if (guardRepository.findByUserName(cleanUsername).isPresent()) {
+            throw new IllegalArgumentException("Guard username already exists");
+        }
+
+        Guard guard = new Guard();
+        guard.setUserName(cleanUsername);
+        guard.setHashedPin(encoder.encode(pin.trim()));
+        return guardRepository.save(guard);
+    }
 }

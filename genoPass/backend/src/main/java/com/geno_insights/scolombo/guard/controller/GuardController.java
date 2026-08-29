@@ -21,4 +21,13 @@ public class GuardController {
     ) {
         return guardService.login(username, pin);
     }
+
+    @PostMapping("/register")
+    public String register(
+            @RequestParam String username,
+            @RequestParam String pin
+    ) {
+        guardService.register(username, pin);
+        return "Guard registered successfully";
+    }
 }
