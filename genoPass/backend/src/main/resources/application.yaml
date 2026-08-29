@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: scolombo
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL:update}
+    show-sql: false
+
+server:
+  port: ${PORT:8080}
+
+supabase:
+  url: ${SUPABASE_URL:https://mock.supabase.co}
+  service-key: ${SUPABASE_SERVICE_KEY:mock-key}
+  bucket: ${SUPABASE_BUCKET:visitors}

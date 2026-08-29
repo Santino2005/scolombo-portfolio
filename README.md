@@ -41,6 +41,15 @@ UberClocked is a full-featured e-commerce and interactive PC building platform d
 
 ---
 
+### GenoPass PRO – Smart Access & Visitor Management System
+- **Live Frontend (Vercel):** [https://geno-insights-challenge.vercel.app](https://geno-insights-challenge.vercel.app)
+- **Live Backend API (Railway):** [https://sparkling-fulfillment-production-89e4.up.railway.app](https://sparkling-fulfillment-production-89e4.up.railway.app)
+- **Repository Path:** [genoPass/](file:///home/elchurro274/Faculty/PortFolio/scolombo-portfolio/genoPass)
+
+A full-stack enterprise access management and digital badge issuance platform. Includes a Guard Command Center with real-time analytics, live photo capture via webcam, digital badge generation with high-res dynamic QR codes, instant checkout scanning with webcam scanner, and Excel audit export (.xlsx) with Apache POI. Includes automated JaCoCo unit & integration testing with >80% code coverage.
+
+---
+
 ### Bravito – Full-Stack Developer & Product Owner
 
 **Product:** https://bravitoapp.vercel.app/login
