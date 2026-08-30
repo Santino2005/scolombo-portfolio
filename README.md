@@ -48,7 +48,7 @@ Plataforma integral de comercio electrónico y ensamblado interactivo de computa
 ---
 
 ### GenoPass PRO – Control de Accesos y Emisión de Credenciales QR
-- **Demo:** [https://geno-insights-challenge.vercel.app](https://geno-insights-challenge.vercel.app)
+- **Demo:** [https://genopasspro.vercel.app] (https://genopasspro.vercel.app)
 - **Ruta en Repositorio:** [./genoPass](./genoPass)
 
 Plataforma corporativa de gestión de accesos y emisión de credenciales digitales. Incluye un puesto de control para guardias con analíticas en tiempo real, captura de fotos en vivo mediante webcam, generación de gafetes digitales con códigos QR dinámicos, escáner web para registro rápido de egresos y exportación de auditorías a Excel (.xlsx) con Apache POI. Cuenta con cobertura automatizada de pruebas unitarias e integración (+80% con JaCoCo).
