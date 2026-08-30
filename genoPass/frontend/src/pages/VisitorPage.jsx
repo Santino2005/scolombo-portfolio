@@ -7,6 +7,7 @@ import { APP_CONFIG } from "../constants/config";
 import AppShell from "../components/AppShell";
 import Navbar from "../components/Navbar";
 import CredentialModal from "../components/CredentialModal";
+import { IconTicket, IconIdCard, IconUser, IconSearch, IconQrCode } from "../components/Icons";
 
 export default function VisitorPage() {
     const [dni, setDni] = useState("");
@@ -51,7 +52,7 @@ export default function VisitorPage() {
             const response = await registerEntry(dni.trim(), sector);
             setVisit(response.data);
             setCredentialOpen(true);
-            showFeedback("¡Pase de acceso generado correctamente!", "success");
+            showFeedback("Pase de acceso generado correctamente", "success");
         } catch (err) {
             showFeedback(err.message || "No se pudo generar el QR de ingreso. Verifique si ya tiene una visita activa.", "error");
         } finally {
@@ -84,7 +85,9 @@ export default function VisitorPage() {
 
             <section className="panel-card visitor-kiosk-card">
                 <div className="kiosk-header">
-                    <div className="kiosk-icon">🎟️</div>
+                    <div className="kiosk-icon">
+                        <IconTicket size={28} />
+                    </div>
                     <h2 className="kiosk-title">Portal de Autogestión</h2>
                     <p className="kiosk-subtitle">Emisión de credencial digital y consulta de pases de acceso</p>
                 </div>
@@ -113,7 +116,8 @@ export default function VisitorPage() {
                             onClick={checkVisitorRegistration}
                             disabled={loading}
                         >
-                            Verificar
+                            <IconSearch size={14} className="inline-icon" />
+                            <span>Verificar</span>
                         </button>
                     </div>
                 </div>
@@ -124,7 +128,7 @@ export default function VisitorPage() {
                             {visitorPreview.photoUrl ? (
                                 <img src={visitorPreview.photoUrl} alt="Foto" className="kiosk-avatar-img" />
                             ) : (
-                                <span>👤</span>
+                                <IconUser size={24} className="avatar-placeholder-icon" />
                             )}
                         </div>
                         <div className="visitor-welcome-text">
@@ -156,7 +160,8 @@ export default function VisitorPage() {
                         onClick={handleGenerateEntryQr}
                         disabled={loading}
                     >
-                        {loading ? "Generando..." : "🎟️ Generar Pase de Ingreso (QR)"}
+                        <IconQrCode size={18} className="inline-icon" />
+                        <span>{loading ? "Generando..." : "Generar Pase de Ingreso (QR)"}</span>
                     </button>
 
                     <button
@@ -165,7 +170,8 @@ export default function VisitorPage() {
                         onClick={handleViewActiveCredential}
                         disabled={loading}
                     >
-                        {loading ? "Buscando..." : "🪪 Ver Mi Credencial Activa"}
+                        <IconIdCard size={18} className="inline-icon" />
+                        <span>{loading ? "Buscando..." : "Ver Mi Credencial Activa"}</span>
                     </button>
                 </div>
             </section>

@@ -1,4 +1,5 @@
 import CredentialCard from "./CredentialCard";
+import { IconPrinter, IconClose } from "./Icons";
 
 export default function CredentialModal({ visit, onClose }) {
     if (!visit) return null;
@@ -13,7 +14,7 @@ export default function CredentialModal({ visit, onClose }) {
                 <div className="modal-header-bar">
                     <h2 className="modal-title">Pase de Acceso Generado</h2>
                     <button type="button" className="btn-modal-close" onClick={onClose} aria-label="Cerrar">
-                        ✕
+                        <IconClose size={18} />
                     </button>
                 </div>
 
@@ -23,7 +24,8 @@ export default function CredentialModal({ visit, onClose }) {
 
                 <div className="modal-footer-actions no-print">
                     <button type="button" className="btn-action primary" onClick={handlePrint}>
-                        🖨️ Imprimir / Guardar PDF
+                        <IconPrinter size={16} className="inline-icon" />
+                        <span>Imprimir / Guardar PDF</span>
                     </button>
                     <button type="button" className="btn-action secondary" onClick={onClose}>
                         Cerrar

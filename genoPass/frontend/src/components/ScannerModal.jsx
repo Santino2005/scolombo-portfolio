@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { registerExit } from "../api/visitApi";
+import { IconClose } from "./Icons";
 
 export default function ScannerModal({ onClose }) {
     const scannedRef = useRef(false);
@@ -32,14 +33,14 @@ export default function ScannerModal({ onClose }) {
 
                 try {
                     await registerExit(decodedText);
-                    setStatusMessage({ text: "✅ Salida registrada exitosamente", type: "success" });
+                    setStatusMessage({ text: "Salida registrada exitosamente", type: "success" });
                     setTimeout(async () => {
                         await scanner.clear();
                         onClose();
                     }, 1200);
                 } catch (err) {
                     setStatusMessage({
-                        text: `⚠️ ${err.message || "QR inválido o visita ya cerrada"}`,
+                        text: err.message || "QR inválido o visita ya cerrada",
                         type: "error",
                     });
                     setTimeout(() => {
@@ -65,7 +66,7 @@ export default function ScannerModal({ onClose }) {
                 <div className="modal-header-bar">
                     <h2 className="modal-title">Escanear QR de Salida</h2>
                     <button type="button" className="btn-modal-close" onClick={onClose} aria-label="Cerrar">
-                        ✕
+                        <IconClose size={18} />
                     </button>
                 </div>
 

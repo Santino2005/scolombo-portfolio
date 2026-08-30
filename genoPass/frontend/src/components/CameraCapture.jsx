@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { IconCamera, IconZap, IconRefresh, IconCheck } from "./Icons";
 
 export default function CameraCapture({ onCapture }) {
     const videoRef = useRef(null);
@@ -82,14 +83,19 @@ export default function CameraCapture({ onCapture }) {
                 {preview ? (
                     <div className="camera-preview-wrapper">
                         <img src={preview} alt="Foto capturada del visitante" className="camera-preview-img" />
-                        <span className="camera-badge-success">✓ Foto capturada</span>
+                        <span className="camera-badge-success">
+                            <IconCheck size={12} className="inline-icon" />
+                            <span>Foto capturada</span>
+                        </span>
                     </div>
                 ) : (
                     <div className="camera-live-wrapper">
                         <video ref={videoRef} autoPlay playsInline muted className={`camera-video ${started ? "active" : "inactive"}`} />
                         {!started && !error && (
                             <div className="camera-placeholder">
-                                <span className="camera-placeholder-icon">📸</span>
+                                <span className="camera-placeholder-icon">
+                                    <IconCamera size={26} />
+                                </span>
                                 <span className="camera-placeholder-text">Cámara lista para captura</span>
                             </div>
                         )}
@@ -103,19 +109,22 @@ export default function CameraCapture({ onCapture }) {
             <div className="camera-controls">
                 {!started && !preview && (
                     <button type="button" className="btn-camera primary" onClick={startCamera}>
-                        📷 Iniciar Cámara
+                        <IconCamera size={16} className="inline-icon" />
+                        <span>Iniciar Cámara</span>
                     </button>
                 )}
 
                 {started && !preview && (
                     <button type="button" className="btn-camera btn-capture" onClick={capturePhoto}>
-                        ⚡ Capturar Fotografía
+                        <IconZap size={16} className="inline-icon" />
+                        <span>Capturar Fotografía</span>
                     </button>
                 )}
 
                 {preview && (
                     <button type="button" className="btn-camera secondary" onClick={repeatPhoto}>
-                        🔄 Tomar Otra Foto
+                        <IconRefresh size={14} className="inline-icon" />
+                        <span>Tomar Otra Foto</span>
                     </button>
                 )}
             </div>

@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { APP_CONFIG } from "../constants/config";
 import { ROUTES } from "../constants/routes";
+import { IconShield, IconUser, IconLogout } from "./Icons";
 
 export default function Navbar() {
     const navigate = useNavigate();
@@ -19,16 +20,16 @@ export default function Navbar() {
         <nav className="navbar">
             <div className="navbar-links">
                 <Link to={ROUTES.GUARD} className={`nav-link ${isGuard ? "nav-link-active" : ""}`}>
-                    <span className="nav-icon">🛡️</span>
+                    <IconShield className="nav-icon" size={17} />
                     <span>Panel Guardia</span>
                 </Link>
                 <Link to={ROUTES.VISITOR} className={`nav-link ${isVisitor ? "nav-link-active" : ""}`}>
-                    <span className="nav-icon">👤</span>
+                    <IconUser className="nav-icon" size={17} />
                     <span>Portal Visitante</span>
                 </Link>
             </div>
             <button type="button" onClick={logout} className="nav-logout-btn" title="Cerrar sesión">
-                <span>🚪</span>
+                <IconLogout size={16} />
                 <span className="logout-text">Salir</span>
             </button>
         </nav>

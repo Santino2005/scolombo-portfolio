@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { loginGuard, registerGuard } from "../api/guardApi";
 import { APP_CONFIG } from "../constants/config";
 import { ROUTES } from "../constants/routes";
+import { IconUser, IconLock, IconZap } from "../components/Icons";
 
 export default function LoginPage() {
     const [mode, setMode] = useState("login"); // "login" | "register"
@@ -35,7 +36,7 @@ export default function LoginPage() {
                 navigate(ROUTES.GUARD);
             } else {
                 await registerGuard(cleanUser, cleanPin);
-                setSuccessMessage("¡Guardia registrado con éxito! Ya podés iniciar sesión.");
+                setSuccessMessage("Guardia registrado con éxito. Ya puede iniciar sesión.");
                 setMode("login");
             }
         } catch (err) {
@@ -100,7 +101,9 @@ export default function LoginPage() {
                     <div className="input-group">
                         <label className="input-label">Usuario</label>
                         <div className="input-wrapper">
-                            <span className="input-icon">👤</span>
+                            <span className="input-icon">
+                                <IconUser size={16} />
+                            </span>
                             <input
                                 placeholder="Usuario de guardia"
                                 value={username}
@@ -114,7 +117,9 @@ export default function LoginPage() {
                     <div className="input-group">
                         <label className="input-label">PIN de Seguridad</label>
                         <div className="input-wrapper">
-                            <span className="input-icon">🔒</span>
+                            <span className="input-icon">
+                                <IconLock size={16} />
+                            </span>
                             <input
                                 placeholder="••••"
                                 type="password"
@@ -144,7 +149,8 @@ export default function LoginPage() {
                         onClick={handleUseDemo}
                         disabled={loading}
                     >
-                        ⚡ Usar credenciales Demo (admin / admin)
+                        <IconZap size={14} className="inline-icon" />
+                        <span>Usar credenciales Demo (admin / admin)</span>
                     </button>
                 </div>
             </div>

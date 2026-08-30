@@ -1,6 +1,7 @@
 import { QRCodeCanvas } from "qrcode.react";
 import { SECTORS } from "../constants/sectors";
 import { formatDateTime } from "../utils/dateFormatter";
+import { IconUser, IconBuilding, IconCheck } from "./Icons";
 
 export default function CredentialCard({ visit }) {
     const visitor = visit?.visitor;
@@ -27,14 +28,23 @@ export default function CredentialCard({ visit }) {
                         referrerPolicy="no-referrer"
                     />
                 ) : (
-                    <div className="badge-photo-placeholder">👤</div>
+                    <div className="badge-photo-placeholder">
+                        <IconUser size={36} />
+                    </div>
                 )}
-                <span className="badge-verified-dot" title="Identidad Verificada">✓</span>
+                <span className="badge-verified-dot" title="Identidad Verificada">
+                    <IconCheck size={10} />
+                </span>
             </div>
 
             <div className="badge-identity">
                 <h3 className="badge-name">{visitor?.fullName || "Visitante"}</h3>
-                {visitor?.company && <p className="badge-company">🏢 {visitor.company}</p>}
+                {visitor?.company && (
+                    <p className="badge-company">
+                        <IconBuilding size={13} className="inline-icon" />
+                        <span>{visitor.company}</span>
+                    </p>
+                )}
                 <div className="badge-sector-wrap">
                     <span className={`badge-sector-pill ${sectorConfig.badgeClass}`}>
                         {visit?.sector || "General"}

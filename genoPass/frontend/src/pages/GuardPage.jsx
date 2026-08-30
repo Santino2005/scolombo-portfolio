@@ -10,6 +10,19 @@ import AppShell from "../components/AppShell";
 import CameraCapture from "../components/CameraCapture";
 import CredentialModal from "../components/CredentialModal";
 import ScannerModal from "../components/ScannerModal";
+import {
+    IconCalendar,
+    IconActivity,
+    IconUsers,
+    IconDownload,
+    IconFileText,
+    IconSearch,
+    IconCheck,
+    IconRefresh,
+    IconIdCard,
+    IconQrCode,
+    IconTable,
+} from "../components/Icons";
 
 export default function GuardPage() {
     const [form, setForm] = useState({
@@ -194,7 +207,9 @@ export default function GuardPage() {
             {/* Metrics Header */}
             <section className="metrics-grid">
                 <div className="metric-card">
-                    <div className="metric-icon-wrap cyan">📅</div>
+                    <div className="metric-icon-wrap cyan">
+                        <IconCalendar size={20} />
+                    </div>
                     <div className="metric-info">
                         <strong className="metric-number">{todayCount}</strong>
                         <span className="metric-label">Ingresos de Hoy</span>
@@ -202,7 +217,9 @@ export default function GuardPage() {
                 </div>
 
                 <div className="metric-card">
-                    <div className="metric-icon-wrap emerald">🟢</div>
+                    <div className="metric-icon-wrap emerald">
+                        <IconActivity size={20} />
+                    </div>
                     <div className="metric-info">
                         <strong className="metric-number">{activeInsideCount}</strong>
                         <span className="metric-label">Visitantes Activos</span>
@@ -210,7 +227,9 @@ export default function GuardPage() {
                 </div>
 
                 <div className="metric-card">
-                    <div className="metric-icon-wrap purple">👥</div>
+                    <div className="metric-icon-wrap purple">
+                        <IconUsers size={20} />
+                    </div>
                     <div className="metric-info">
                         <strong className="metric-number">{totalVisitors}</strong>
                         <span className="metric-label">Total en Base de Datos</span>
@@ -218,7 +237,9 @@ export default function GuardPage() {
                 </div>
 
                 <div className="metric-card action-metric-card" onClick={downloadExcel} role="button" tabIndex={0}>
-                    <div className="metric-icon-wrap orange">📥</div>
+                    <div className="metric-icon-wrap orange">
+                        <IconDownload size={20} />
+                    </div>
                     <div className="metric-info">
                         <strong className="metric-number">Exportar</strong>
                         <span className="metric-label">Descargar Reporte .XLSX</span>
@@ -237,9 +258,10 @@ export default function GuardPage() {
                 {/* Left Column: Registration & Actions */}
                 <section className="panel-card registration-panel">
                     <div className="panel-header">
-                        <h2 className="panel-title">
-                            <span className="panel-title-icon">📝</span> Registro y Emisión de Pases
-                        </h2>
+                        <div className="panel-title-group">
+                            <IconFileText size={18} className="panel-title-icon-svg" />
+                            <h2 className="panel-title">Registro y Emisión de Pases</h2>
+                        </div>
                         <span className="panel-badge">Control de Acceso</span>
                     </div>
 
@@ -259,7 +281,8 @@ export default function GuardPage() {
                                 disabled={loading}
                                 title="Buscar visitante registrado"
                             >
-                                🔍 Buscar
+                                <IconSearch size={14} className="inline-icon" />
+                                <span>Buscar</span>
                             </button>
                         </div>
                     </div>
@@ -315,7 +338,8 @@ export default function GuardPage() {
                             onClick={handleRegisterVisitor}
                             disabled={loading}
                         >
-                            ✅ Registrar Datos
+                            <IconCheck size={16} className="inline-icon" />
+                            <span>Registrar Datos</span>
                         </button>
                         <button
                             type="button"
@@ -323,7 +347,8 @@ export default function GuardPage() {
                             onClick={cleanForm}
                             disabled={loading}
                         >
-                            🧹 Limpiar
+                            <IconRefresh size={14} className="inline-icon" />
+                            <span>Limpiar</span>
                         </button>
                     </div>
 
@@ -336,7 +361,8 @@ export default function GuardPage() {
                             onClick={handleGenerateCredential}
                             disabled={loading}
                         >
-                            🪪 Generar Credencial de Acceso
+                            <IconIdCard size={18} className="inline-icon" />
+                            <span>Generar Credencial de Acceso</span>
                         </button>
 
                         <button
@@ -344,7 +370,8 @@ export default function GuardPage() {
                             className="btn-action btn-scan-exit"
                             onClick={() => setScannerOpen(true)}
                         >
-                            📷 Escanear QR de Salida
+                            <IconQrCode size={18} className="inline-icon" />
+                            <span>Escanear QR de Salida</span>
                         </button>
                     </div>
                 </section>
@@ -353,9 +380,10 @@ export default function GuardPage() {
                 <section className="panel-card monitor-panel">
                     <div className="panel-header">
                         <div>
-                            <h2 className="panel-title">
-                                <span className="panel-title-icon">📊</span> Registro de Visitas en Vivo
-                            </h2>
+                            <div className="panel-title-group">
+                                <IconTable size={18} className="panel-title-icon-svg" />
+                                <h2 className="panel-title">Registro de Visitas en Vivo</h2>
+                            </div>
                             <p className="panel-subtitle">Historial de entradas y salidas registradas en el edificio</p>
                         </div>
 
@@ -372,7 +400,7 @@ export default function GuardPage() {
                     <div className="table-responsive-container">
                         {filteredHistory.length === 0 ? (
                             <div className="empty-state-box">
-                                <span className="empty-state-icon">📋</span>
+                                <IconFileText size={32} className="empty-state-icon-svg" />
                                 <p className="empty-state-text">No se encontraron registros de visitas</p>
                             </div>
                         ) : (
@@ -425,7 +453,8 @@ export default function GuardPage() {
                                                             }}
                                                             title="Ver credencial"
                                                         >
-                                                            🪪 Ver Pase
+                                                            <IconIdCard size={14} className="inline-icon" />
+                                                            <span>Ver Pase</span>
                                                         </button>
                                                     )}
                                                 </td>
