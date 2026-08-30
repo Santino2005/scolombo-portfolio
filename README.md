@@ -38,7 +38,7 @@ Trabajo principalmente con TypeScript, JavaScript, Python, Java y Kotlin, desarr
 ## Proyectos Destacados
 
 ### UberClocked – Armado de PCs de Alto Rendimiento y E-Commerce
-- **Web / Demo:** [https://uberclocked.vercel.app](https://uberclocked.vercel.app)
+- **Demo:** [https://uberclocked.vercel.app](https://uberclocked.vercel.app)
 - **Ruta en Repositorio:** [./UberClocked](./UberClocked)
 
 Plataforma integral de comercio electrónico y ensamblado interactivo de computadoras diseñada para entusiastas del hardware y gamers. Permite configurar PCs personalizadas con validación de compatibilidad de componentes en tiempo real, explorar un catálogo dinámico con filtros avanzados, participar de un marketplace comunitario y procesar pagos mediante Mercado Pago.
@@ -48,8 +48,7 @@ Plataforma integral de comercio electrónico y ensamblado interactivo de computa
 ---
 
 ### GenoPass PRO – Control de Accesos y Emisión de Credenciales QR
-- **Frontend Web:** [https://geno-insights-challenge.vercel.app](https://geno-insights-challenge.vercel.app)
-- **Backend API:** [https://sparkling-fulfillment-production-89e4.up.railway.app](https://sparkling-fulfillment-production-89e4.up.railway.app)
+- **Demo:** [https://geno-insights-challenge.vercel.app](https://geno-insights-challenge.vercel.app)
 - **Ruta en Repositorio:** [./genoPass](./genoPass)
 
 Plataforma corporativa de gestión de accesos y emisión de credenciales digitales. Incluye un puesto de control para guardias con analíticas en tiempo real, captura de fotos en vivo mediante webcam, generación de gafetes digitales con códigos QR dinámicos, escáner web para registro rápido de egresos y exportación de auditorías a Excel (.xlsx) con Apache POI. Cuenta con cobertura automatizada de pruebas unitarias e integración (+80% con JaCoCo).
