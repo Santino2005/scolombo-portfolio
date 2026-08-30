@@ -41,7 +41,7 @@ public class SupabaseStorageService {
                     .retrieve()
                     .toBodilessEntity();
 
-            return supabaseUrl + "/storage/v1/object/public+/" + bucket + "/" + path;
+            return supabaseUrl + "/storage/v1/object/public/" + bucket + "/" + path;
 
         } catch (IOException exception) {
             throw new RuntimeException("Could not upload visitor photo", exception);

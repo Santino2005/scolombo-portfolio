@@ -11,6 +11,7 @@ spring:
       data-source-properties:
         prepareThreshold: 0
         preparedStatementCacheQueries: 0
+        gssEncMode: disable
 
   jpa:
     hibernate:
