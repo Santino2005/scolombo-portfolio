@@ -162,8 +162,7 @@ Full-featured e-commerce and interactive PC building platform designed for hardw
 ---
 
 ### GenoPass PRO – Smart Access & Visitor Management System
-- **Web Frontend:** [https://geno-insights-challenge.vercel.app](https://geno-insights-challenge.vercel.app)
-- **Backend API:** [https://sparkling-fulfillment-production-89e4.up.railway.app](https://sparkling-fulfillment-production-89e4.up.railway.app)
+- **Demo:** [https://genopasspro.vercel.app](https://genopasspro.vercel.app)
 - **Repository Path:** [./genoPass](./genoPass)
 
 Enterprise access management and digital badge issuance platform. Includes a Guard Command Center with real-time analytics, live webcam photo capture, dynamic QR badge issuance, webcam checkout scanning, and Excel audit export (.xlsx) with Apache POI. Tested with automated unit and integration coverage (>80% JaCoCo).
