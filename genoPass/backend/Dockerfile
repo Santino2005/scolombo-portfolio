@@ -7,6 +7,7 @@ RUN gradle clean bootJar --no-daemon -x test
 
 # Runtime Stage
 FROM eclipse-temurin:21-jre-alpine
+RUN apk add --no-cache ca-certificates
 WORKDIR /app
 COPY --from=builder /app/build/libs/scolombo-0.0.1-SNAPSHOT.jar app.jar
 
